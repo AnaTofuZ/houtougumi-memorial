@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { goodsItems } from '../data/goods';
+
+const statusStyle: Record<string, string> = {
+  '販売中': 'background: #D1FAE5; color: #065F46',
+  '販売終了': 'background: #F3F4F6; color: #6B7280',
+  '近日公開': 'background: #FEF3C7; color: #92400E',
+};
+---
+
+<BaseLayout title="グッズ" description="ほうとう組のグッズ紹介ページです。">
+  <!-- Page hero -->
+  <section class="pt-16 pb-10" data-scroll-bg="#EAE3FF">
+    <div class="container mx-auto px-4 md:px-6 text-center">
+      <p class="tag text-white mb-4 inline-block bg-[#6B4D9E] font-bold">GOODS</p>
+      <h1 class="text-4xl md:text-5xl font-[--font-heading] font-extrabold mb-3 text-[#6B4D9E]">
+        グッズ紹介
+      </h1>
+      <p class="text-sm text-[#595959]">※ こちらはダミーの説明文です。グッズページの説明文が入ります。</p>
+    </div>
+  </section>
+
+  <!-- Status filter tabs -->
+  <section class="pb-8" data-scroll-bg="#EAE3FF">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="flex justify-center gap-2 flex-wrap">
+        {['すべて', '販売中', '近日公開', '販売終了'].map((status) => (
+          <button
+            data-filter={status}
+            class="filter-btn px-5 py-2 rounded-full text-sm font-bold border-2 border-[#9B7FD4] text-[#6B4D9E] hover:bg-[#6B4D9E] hover:text-white hover:border-[#6B4D9E] transition-colors"
+          >
+            {status}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Goods grid -->
+  <section class="pb-24" data-scroll-bg="#EAE3FF">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8" id="goods-grid">
+        {
+          goodsItems.map((item) => (
+            <div class="card group p-0 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300" data-status={item.status}>
+              <!-- Image -->
+              <div class="aspect-square flex items-center justify-center overflow-hidden bg-[#EDE4FF]">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  class="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  onError="this.style.display='none'"
+                />
+              </div>
+
+              <!-- Info -->
+              <div class="p-5">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  <h3 class="font-bold text-base leading-snug">{item.name}</h3>
+                  <span class="tag text-xs flex-shrink-0 font-bold" style={statusStyle[item.status]}>
+                    {item.status}
+                  </span>
+                </div>
+                <p class="text-sm text-[#444444] mb-4 leading-relaxed">{item.description}</p>
+                <div class="flex items-center justify-between">
+                  {item.price && <span class="text-base font-bold text-[#6B4D9E]">{item.price}</span>}
+                  {item.shopUrl && item.status === '販売中' ? (
+                    <a
+                      href={item.shopUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 text-sm font-bold px-4 py-2 rounded-full text-white bg-[#6B4D9E] hover:bg-[#5a3d8a] transition-colors"
+                    >
+                      購入する ↗
+                    </a>
+                  ) : item.status === '近日公開' ? (
+                    <span class="text-sm text-[#92400E] font-bold">近日公開</span>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('[data-status]');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter ?? 'すべて';
+
+      buttons.forEach((b) => {
+        b.classList.remove('bg-[#6B4D9E]', 'text-white', 'border-[#6B4D9E]');
+        b.classList.add('border-[#9B7FD4]', 'text-[#6B4D9E]');
+      });
+      btn.classList.remove('border-[#9B7FD4]', 'text-[#6B4D9E]');
+      btn.classList.add('bg-[#6B4D9E]', 'text-white', 'border-[#6B4D9E]');
+
+      cards.forEach((card) => {
+        if (filter === 'すべて' || card.dataset.status === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

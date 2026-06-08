@@ -1,0 +1,71 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'ほうとう組（宝灯桃汁・ボス・司令官）の非公式ファンサイトです。',
+  ogImage = '/favicon.svg',
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ほうとう組ファンサイト` : 'ほうとう組ファンサイト';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      const sections = document.querySelectorAll<HTMLElement>('[data-scroll-bg]');
+      if (sections.length) {
+        const ratioMap = new Map<HTMLElement, number>();
+        sections.forEach((s) => ratioMap.set(s, 0));
+
+        const applyBest = () => {
+          let best: HTMLElement | null = null;
+          let bestRatio = -1;
+          ratioMap.forEach((ratio, el) => {
+            if (ratio > bestRatio) { bestRatio = ratio; best = el; }
+          });
+          if (best) {
+            const color = (best as HTMLElement).dataset.scrollBg;
+            if (color) document.body.style.backgroundColor = color;
+          }
+        };
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              ratioMap.set(entry.target as HTMLElement, entry.intersectionRatio);
+            });
+            applyBest();
+          },
+          { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0] }
+        );
+        sections.forEach((s) => observer.observe(s));
+      }
+    </script>
+  </body>
+</html>

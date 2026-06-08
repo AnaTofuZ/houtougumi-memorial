@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IllustSwitcher from '../../components/IllustSwitcher';
+import { getMember } from '../../data/members';
+
+const member = getMember('boss')!;
+const { name, color, colorLight, colorDark, tagline, profile, illustrations, episodes, archives, quotes } = member;
+---
+
+<BaseLayout title={name} description={`${name}のプロフィールページ。思い出のエピソード・おすすめアーカイブ・語録集。`}>
+  <!-- Breadcrumb -->
+  <div class="container mx-auto px-4 md:px-6 pt-6">
+    <nav class="text-sm text-[#444444]">
+      <a href="/" class="hover:text-[#FF8FAB] transition-colors">トップ</a>
+      <span class="mx-2">›</span>
+      <span style={`color: ${colorDark}`}>{name}</span>
+    </nav>
+  </div>
+
+  <!-- Profile hero -->
+  <section class="pt-8 pb-16" data-scroll-bg="#EDE4FF">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+
+        <!-- Illustration switcher -->
+        <div class="md:sticky top-24">
+          <IllustSwitcher
+            illustrations={illustrations}
+            themeColor={color}
+            themeLightColor={colorLight}
+            themeDarkColor={colorDark}
+            name={name}
+            client:load
+          />
+        </div>
+
+        <!-- Profile info -->
+        <div>
+          <div class="mb-6">
+            <p class="tag mb-3 inline-block text-white" style={`background-color: ${color}`}>MEMBER</p>
+            <h1 class="text-4xl font-[--font-heading] font-extrabold mb-2" style={`color: ${colorDark}`}>
+              {name}
+            </h1>
+            <p class="text-[#444444]">{tagline}</p>
+          </div>
+
+          <div class="card mb-6">
+            <h2 class="text-sm font-bold mb-2 flex items-center gap-2" style={`color: ${colorDark}`}>
+              プロフィール
+            </h2>
+            <p class="text-sm leading-relaxed whitespace-pre-line text-[#1A1A1A]">{profile}</p>
+          </div>
+
+          <div class="h-1.5 rounded-full mb-6" style={`background-color: ${color}`}></div>
+
+          <div class="flex flex-wrap gap-2">
+            {['エピソード', 'アーカイブ', '語録集'].map((label) => (
+              <a
+                href={`#${label}`}
+                class="px-4 py-1.5 rounded-full text-sm font-bold border-2 hover:-translate-y-0.5 transition-all"
+                style={`border-color: ${color}; color: ${colorDark}`}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Episodes -->
+  <section id="エピソード" class="py-16 bg-white" data-scroll-bg="#FFFFFF">
+    <div class="container mx-auto px-4 md:px-6 max-w-3xl">
+      <h2 class="section-title text-2xl md:text-3xl mb-10">思い出深いエピソード</h2>
+      <div class="space-y-5">
+        {episodes.map((ep, i) => (
+          <div class="card" style={`border-left: 4px solid ${color}`}>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-bold flex-shrink-0" style={`background-color: ${colorDark}`}>{i + 1}</span>
+              <h3 class="font-bold text-base" style={`color: ${colorDark}`}>{ep.title}</h3>
+            </div>
+            <p class="text-sm text-[#444444] leading-relaxed">{ep.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Archives -->
+  <section id="アーカイブ" class="py-16">
+    <div class="container mx-auto px-4 md:px-6 max-w-3xl">
+      <h2 class="section-title text-2xl md:text-3xl mb-10">おすすめアーカイブ</h2>
+      <div class="space-y-4">
+        {archives.map((arc) => (
+          <a
+            href={arc.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card flex items-center gap-4 hover:shadow-lg hover:-translate-y-0.5 transition-all group"
+          >
+            <div class="w-12 h-12 rounded-xl flex-shrink-0" style={`background-color: ${colorLight}`}></div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-sm group-hover:underline" style={`color: ${colorDark}`}>{arc.title}</h3>
+              {arc.description && <p class="text-xs text-[#444444] mt-0.5">{arc.description}</p>}
+              <p class="text-xs text-[#444444] mt-1">
+                {new Date(arc.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            </div>
+            <svg class="w-4 h-4 text-[#444444] group-hover:text-[#FF8FAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Quotes -->
+  <section id="語録集" class="py-16 bg-white" data-scroll-bg="#FFFFFF">
+    <div class="container mx-auto px-4 md:px-6 max-w-3xl">
+      <h2 class="section-title text-2xl md:text-3xl mb-10">語録集</h2>
+      <div class="space-y-4">
+        {quotes.map((quote) => (
+          <div
+            class="relative pl-6 py-4 pr-4 rounded-2xl border-l-4"
+            style={`background-color: ${colorLight}; border-color: ${color}`}
+          >
+            <span class="absolute left-3 top-3 text-2xl leading-none opacity-30" style={`color: ${colorDark}`}>&ldquo;</span>
+            <p class="text-base font-bold font-[--font-heading]" style={`color: ${colorDark}`}>{quote}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to top -->
+  <div class="py-10 text-center">
+    <a href="/" class="inline-flex items-center gap-2 text-sm text-[#444444] hover:text-[#FF8FAB] transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      トップに戻る
+    </a>
+  </div>
+</BaseLayout>

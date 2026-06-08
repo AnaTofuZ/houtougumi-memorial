@@ -1,0 +1,110 @@
+---
+const navLinks = [
+  { href: '/music', label: '音楽' },
+  { href: '/fanart', label: 'ファンイラスト' },
+  { href: '/comments', label: 'コメント集' },
+  { href: '/goods', label: 'グッズ' },
+];
+
+const members = [
+  { href: '/members/momojiru', label: '宝灯桃汁', color: '#FFB7C5' },
+  { href: '/members/boss', label: 'ボス', color: '#B39DDB' },
+  { href: '/members/shirei', label: '司令官', color: '#7ECEC4' },
+];
+---
+
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#FFD6E7] shadow-sm">
+  <nav class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
+    <!-- Logo -->
+    <a
+      href="/"
+      class="font-[--font-heading] text-base font-bold text-[#C55070] hover:opacity-80 transition-opacity flex items-center gap-2"
+    >
+      <span>ほうとう組</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-5 text-sm font-medium">
+      <a href="/" class="hover:text-[#FF8FAB] transition-colors">トップ</a>
+
+      <!-- Members dropdown -->
+      <div class="relative group">
+        <button class="hover:text-[#FF8FAB] transition-colors flex items-center gap-1 cursor-pointer">
+          メンバー
+          <svg class="w-3 h-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div
+          class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white rounded-2xl shadow-lg border border-[#FFD6E7] p-2 w-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+        >
+          {
+            members.map((m) => (
+              <a
+                href={m.href}
+                class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm hover:bg-[#FFF5FA] transition-colors"
+              >
+                <span
+                  class="inline-block w-3 h-3 rounded-full flex-shrink-0"
+                  style={`background-color: ${m.color}`}
+                />
+                {m.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {navLinks.map((link) => <a href={link.href} class="hover:text-[#FF8FAB] transition-colors">{link.label}</a>)}
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden p-2 rounded-xl hover:bg-[#FFF5FA] transition-colors"
+      aria-label="メニューを開く"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-[#FFD6E7] bg-white">
+    <div class="container mx-auto px-4 py-3 space-y-1">
+      <a href="/" class="block py-2 px-3 rounded-xl text-sm font-medium hover:bg-[#FFF5FA] transition-colors"
+        >トップ</a
+      >
+      <div>
+        <p class="px-3 pt-2 pb-1 text-xs text-[#444444] font-semibold">メンバー</p>
+        {
+          members.map((m) => (
+            <a
+              href={m.href}
+              class="flex items-center gap-2 py-2 px-3 rounded-xl text-sm hover:bg-[#FFF5FA] transition-colors"
+            >
+              <span class="w-3 h-3 rounded-full flex-shrink-0" style={`background-color: ${m.color}`} />
+              {m.label}
+            </a>
+          ))
+        }
+      </div>
+      {
+        navLinks.map((link) => (
+          <a href={link.href} class="block py-2 px-3 rounded-xl text-sm font-medium hover:bg-[#FFF5FA] transition-colors">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

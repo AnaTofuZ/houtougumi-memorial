@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FanArtGallery from '../components/FanArtGallery';
+import { fanarts } from '../data/fanart';
+---
+
+<BaseLayout title="ファンイラスト" description="ほうとう組のファンイラスト集です。">
+  <!-- Page hero -->
+  <section class="pt-16 pb-10" data-scroll-bg="#FFF5FA">
+    <div class="container mx-auto px-4 md:px-6 text-center">
+      <p class="tag text-white mb-4 inline-block bg-[#C55070] font-bold">FAN ART</p>
+      <h1 class="text-4xl md:text-5xl font-[--font-heading] font-extrabold mb-3 text-[#C55070]">
+        ファンイラスト集
+      </h1>
+      <p class="text-sm text-[#595959]">※ こちらはダミーの説明文です。ファンイラストページの説明文が入ります。</p>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="pb-20" data-scroll-bg="#FFF5FA">
+    <div class="container mx-auto px-4 md:px-6">
+      {fanarts.length > 0 ? (
+        <FanArtGallery artworks={fanarts} client:load />
+      ) : (
+        <div class="text-center py-20 text-[#444444]">
+          <p>ファンイラストを募集中です。</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Submission info -->
+  <section class="pb-20" data-scroll-bg="#FFF0F5">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="card max-w-lg mx-auto text-center">
+        <h2 class="text-lg font-bold mb-2">ファンイラスト掲載について</h2>
+        <p class="text-sm text-[#444444] leading-relaxed">
+          ※ こちらはダミーの説明文です。掲載に関するご案内の文章が入ります。
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

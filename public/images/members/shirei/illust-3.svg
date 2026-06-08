@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450" width="300" height="450">
+  <defs>
+    <linearGradient id="bg" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#F0FDFA"/>
+      <stop offset="100%" stop-color="#7ECEC4"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="450" fill="url(#bg)" rx="16"/>
+  <circle cx="150" cy="60" r="20" fill="#5CBAB2" opacity="0.3"/>
+  <ellipse cx="150" cy="148" rx="52" ry="58" fill="#7ECEC4" opacity="0.6"/>
+  <path d="M98 218 Q150 260 202 218 L210 395 Q150 428 90 395 Z" fill="#7ECEC4" opacity="0.55"/>
+  <text x="150" y="430" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#4BA89E" font-weight="bold">司令官</text>
+</svg>
