@@ -10,24 +10,24 @@ function formatDate(str: string) {
 
 <BaseLayout title="音楽" description="ほうとう組のオリジナル曲をまとめたページです。">
   <!-- Page hero -->
-  <section class="pt-16 pb-10" data-scroll-bg="#EFF9F7">
+  <section class="pt-16 pb-10" data-scroll-bg="#D8FBF3">
     <div class="container mx-auto px-4 md:px-6 text-center">
-      <p class="tag text-white mb-4 inline-block bg-[#3A8A80] font-bold">MUSIC</p>
-      <h1 class="text-4xl md:text-5xl font-[--font-heading] font-extrabold mb-3 text-[#4BA89E]">
+      <p class="tag text-white mb-4 inline-block bg-[#159E85] font-bold">MUSIC</p>
+      <h1 class="text-4xl md:text-5xl font-[--font-heading] font-extrabold mb-3 text-[#2AD1B2]">
         オリジナル曲
       </h1>
-      <p class="text-sm text-[#595959]">※ こちらはダミーの説明文です。楽曲ページの説明文が入ります。</p>
+      <p class="text-base text-[#595959]">※ こちらはダミーの説明文です。楽曲ページの説明文が入ります。</p>
     </div>
   </section>
 
   <!-- Featured song -->
   {featuredSong && (
-    <section class="pb-16" data-scroll-bg="#EFF9F7">
+    <section class="pb-16" data-scroll-bg="#D8FBF3">
       <div class="container mx-auto px-4 md:px-6">
         <div class="max-w-2xl mx-auto">
           <div class="card p-0 overflow-hidden">
             <!-- Header -->
-            <div class="px-6 py-5 text-white bg-[#4BA89E]">
+            <div class="px-6 py-5 text-white bg-[#159E85]">
               <span class="tag bg-white/20 text-white text-xs mb-2 inline-block">FEATURED</span>
               <h2 class="text-2xl font-bold font-[--font-heading]">{featuredSong.title}</h2>
               <p class="text-sm opacity-80 mt-1">{featuredSong.artists}</p>
@@ -42,13 +42,13 @@ function formatDate(str: string) {
 
             <!-- Description -->
             <div class="px-6 pb-6">
-              <p class="text-sm text-[#1A1A1A] leading-relaxed mb-3">{featuredSong.description}</p>
+              <p class="text-base text-[#1A1A1A] leading-[1.75] mb-3">{featuredSong.description}</p>
               <div class="flex flex-wrap items-center gap-3">
                 <span class="text-xs text-[#444444]">
                   {formatDate(featuredSong.releaseDate)}
                 </span>
                 {featuredSong.tags.map((tag) => (
-                  <span class="tag bg-[#C8F0EC] text-[#4BA89E] text-xs">{tag}</span>
+                  <span class="tag bg-[#D8FBF3] text-[#2AD1B2] text-xs">{tag}</span>
                 ))}
               </div>
               {featuredSong.youtubeUrl && (
@@ -72,22 +72,22 @@ function formatDate(str: string) {
   )}
 
   <!-- All songs list -->
-  <section class="pb-20 py-16" data-scroll-bg="#FAFAFA">
+  <section class="pb-20 py-16" data-scroll-bg="#D8FBF3">
     <div class="container mx-auto px-4 md:px-6">
       <h2 class="section-title text-xl md:text-2xl mb-8">すべての楽曲</h2>
       <div class="max-w-2xl mx-auto space-y-4">
         {
           songs.map((song) => (
             <div class="card flex items-start gap-4">
-              <div class="w-16 h-16 rounded-xl flex-shrink-0 bg-[#C8F0EC]"></div>
+              <div class="w-16 h-16 rounded-xl flex-shrink-0 bg-[#D8FBF3]"></div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2 mb-1">
                   <h3 class="font-bold text-base">{song.title}</h3>
                   {song.featured && (
-                    <span class="tag bg-[#4BA89E] text-white text-xs flex-shrink-0">FEAT</span>
+                    <span class="tag bg-[#159E85] text-white text-xs flex-shrink-0">FEAT</span>
                   )}
                 </div>
-                <p class="text-sm text-[#444444] mb-2 line-clamp-2">{song.description}</p>
+                <p class="text-base text-[#444444] mb-2 leading-[1.75] line-clamp-2">{song.description}</p>
                 <div class="flex flex-wrap items-center gap-2">
                   <span class="text-xs text-[#444444]">{formatDate(song.releaseDate)}</span>
                   {song.youtubeUrl && (
@@ -95,7 +95,7 @@ function formatDate(str: string) {
                       href={song.youtubeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-xs text-[#4BA89E] hover:underline font-medium"
+                      class="text-xs text-[#2AD1B2] hover:underline font-medium"
                     >
                       YouTube ↗
                     </a>

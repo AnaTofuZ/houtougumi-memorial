@@ -4,38 +4,38 @@ import { fanComments } from '../data/comments';
 
 const cardBgs = [
   '#FFE4EC',
-  '#EDE4FF',
-  '#C8F0EC',
+  '#DDF0FF',
+  '#D8FBF3',
   '#FFE4EC',
-  '#C8F0EC',
-  '#EDE4FF',
+  '#D8FBF3',
+  '#DDF0FF',
 ];
 ---
 
 <BaseLayout title="コメント集" description="ほうとう組へのファンコメント集です。">
   <!-- Page hero -->
-  <section class="pt-16 pb-10" data-scroll-bg="#E5DBFF">
+  <section class="pt-16 pb-10" data-scroll-bg="#EAF6FF">
     <div class="container mx-auto px-4 md:px-6 text-center">
-      <p class="tag text-white mb-4 inline-block bg-[#6B4D9E] font-bold">COMMENTS</p>
-      <h1 class="text-4xl md:text-5xl font-[--font-heading] font-extrabold mb-3 text-[#5A3D8A]">
+      <p class="tag text-white mb-4 inline-block bg-[#1D86D9] font-bold">COMMENTS</p>
+      <h1 class="text-4xl md:text-5xl font-[--font-heading] font-extrabold mb-3 text-[#166bb0]">
         ファンの声
       </h1>
-      <p class="text-sm text-[#595959]">※ こちらはダミーの説明文です。コメントページの説明文が入ります。</p>
+      <p class="text-base text-[#595959]">※ こちらはダミーの説明文です。コメントページの説明文が入ります。</p>
     </div>
   </section>
 
   <!-- Comments grid -->
-  <section class="pb-20" data-scroll-bg="#E5DBFF">
+  <section class="pb-20" data-scroll-bg="#EAF6FF">
     <div class="container mx-auto px-4 md:px-6">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
         {
           fanComments.map((c, idx) => (
             <div
-              class="rounded-2xl p-5 border border-[#E8D8F8] shadow-sm hover:shadow-md transition-shadow"
+              class="rounded-2xl p-5 border border-[#CFE9FF] shadow-sm hover:shadow-md transition-shadow"
               style={`background-color: ${cardBgs[idx % cardBgs.length]}`}
             >
-              <p class="text-lg text-[#B39DDB] font-bold mb-2 leading-none">&ldquo;</p>
-              <p class="text-sm text-[#1A1A1A] leading-relaxed mb-4">{c.comment}</p>
+              <p class="text-lg text-[#40ACFA] font-bold mb-2 leading-none">&ldquo;</p>
+              <p class="text-base text-[#1A1A1A] leading-[1.75] mb-4">{c.comment}</p>
 
               <div class="flex items-center justify-between">
                 <p class="text-xs font-bold text-[#444444]">{c.handle}</p>

@@ -13,7 +13,7 @@ export interface FanArt {
 export const fanarts: FanArt[] = [
   {
     id: '1',
-    src: '/images/fanart/fanart-placeholder-1.svg',
+    src: '/images/kari.png',
     alt: 'ほうとう組 ファンアート 1',
     artist: '（作者名）',
     tags: ['3人'],
@@ -21,7 +21,7 @@ export const fanarts: FanArt[] = [
   },
   {
     id: '2',
-    src: '/images/fanart/fanart-placeholder-2.svg',
+    src: '/images/kari.png',
     alt: 'ほうとう組 ファンアート 2',
     artist: '（作者名）',
     tags: ['宝灯桃汁'],
@@ -29,7 +29,7 @@ export const fanarts: FanArt[] = [
   },
   {
     id: '3',
-    src: '/images/fanart/fanart-placeholder-3.svg',
+    src: '/images/kari.png',
     alt: 'ほうとう組 ファンアート 3',
     artist: '（作者名）',
     tags: ['ボス'],
@@ -37,7 +37,7 @@ export const fanarts: FanArt[] = [
   },
   {
     id: '4',
-    src: '/images/fanart/fanart-placeholder-4.svg',
+    src: '/images/kari.png',
     alt: 'ほうとう組 ファンアート 4',
     artist: '（作者名）',
     tags: ['司令官'],
@@ -45,7 +45,7 @@ export const fanarts: FanArt[] = [
   },
   {
     id: '5',
-    src: '/images/fanart/fanart-placeholder-5.svg',
+    src: '/images/kari.png',
     alt: 'ほうとう組 ファンアート 5',
     artist: '（作者名）',
     tags: ['3人'],
@@ -53,7 +53,7 @@ export const fanarts: FanArt[] = [
   },
   {
     id: '6',
-    src: '/images/fanart/fanart-placeholder-6.svg',
+    src: '/images/kari.png',
     alt: 'ほうとう組 ファンアート 6',
     artist: '（作者名）',
     tags: ['宝灯桃汁', 'ボス'],

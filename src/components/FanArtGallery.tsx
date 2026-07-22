@@ -126,7 +126,7 @@ export default function FanArtGallery({ artworks }: Props) {
                   href={selected.artistLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#FF8FAB] font-medium hover:underline"
+                  className="text-sm text-[#EE3F87] font-medium hover:underline"
                 >
                   by {selected.artist} ↗
                 </a>
@@ -136,7 +136,7 @@ export default function FanArtGallery({ artworks }: Props) {
               {selected.tags && selected.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 justify-center mt-1">
                   {selected.tags.map((tag) => (
-                    <span key={tag} className="text-xs text-[#444444] bg-[#FFF5FA] px-2 py-0.5 rounded-full">
+                    <span key={tag} className="text-xs text-[#444444] bg-[#FFE1EE] px-2 py-0.5 rounded-full">
                       #{tag}
                     </span>
                   ))}

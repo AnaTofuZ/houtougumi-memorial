@@ -11,7 +11,7 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
   <!-- Breadcrumb -->
   <div class="container mx-auto px-4 md:px-6 pt-6">
     <nav class="text-sm text-[#444444]">
-      <a href="/" class="hover:text-[#FF8FAB] transition-colors">トップ</a>
+      <a href="/" class="hover:text-[#EE3F87] transition-colors">トップ</a>
       <span class="mx-2">›</span>
       <span style={`color: ${colorDark}`}>{name}</span>
     </nav>
@@ -41,14 +41,14 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
             <h1 class="text-4xl font-[--font-heading] font-extrabold mb-2" style={`color: ${colorDark}`}>
               {name}
             </h1>
-            <p class="text-[#444444]">{tagline}</p>
+            <p class="text-base text-[#444444] leading-[1.75]">{tagline}</p>
           </div>
 
           <div class="card mb-6">
             <h2 class="text-sm font-bold mb-2 flex items-center gap-2" style={`color: ${colorDark}`}>
               プロフィール
             </h2>
-            <p class="text-sm leading-relaxed whitespace-pre-line text-[#1A1A1A]">{profile}</p>
+            <p class="text-base leading-[1.75] whitespace-pre-line text-[#1A1A1A]">{profile}</p>
           </div>
 
           <div class="h-1.5 rounded-full mb-6" style={`background-color: ${color}`}></div>
@@ -80,7 +80,7 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
               <span class="w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-bold flex-shrink-0" style={`background-color: ${colorDark}`}>{i + 1}</span>
               <h3 class="font-bold text-base" style={`color: ${colorDark}`}>{ep.title}</h3>
             </div>
-            <p class="text-sm text-[#444444] leading-relaxed">{ep.description}</p>
+            <p class="text-base text-[#444444] leading-[1.75]">{ep.description}</p>
           </div>
         ))}
       </div>
@@ -107,7 +107,7 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
                 {new Date(arc.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
             </div>
-            <svg class="w-4 h-4 text-[#444444] group-hover:text-[#FF8FAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-[#444444] group-hover:text-[#EE3F87] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
@@ -136,7 +136,7 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
 
   <!-- Back to top -->
   <div class="py-10 text-center">
-    <a href="/" class="inline-flex items-center gap-2 text-sm text-[#444444] hover:text-[#FF8FAB] transition-colors">
+    <a href="/" class="inline-flex items-center gap-2 text-sm text-[#444444] hover:text-[#EE3F87] transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>

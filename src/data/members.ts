@@ -37,9 +37,9 @@ export const members: MemberProfile[] = [
     profile:
       'これはダミーのプロフィール文です。\n宝灯桃汁についての説明文が入ります。',
     illustrations: [
-      { src: '/images/members/momojiru/illust-1.svg', alt: '宝灯桃汁 立ち絵 1（仮）' },
-      { src: '/images/members/momojiru/illust-2.svg', alt: '宝灯桃汁 立ち絵 2（仮）' },
-      { src: '/images/members/momojiru/illust-3.svg', alt: '宝灯桃汁 立ち絵 3（仮）' },
+      { src: '/images/kari.png', alt: '宝灯桃汁 立ち絵 1（仮）' },
+      { src: '/images/kari.png', alt: '宝灯桃汁 立ち絵 2（仮）' },
+      { src: '/images/kari.png', alt: '宝灯桃汁 立ち絵 3（仮）' },
     ],
     episodes: [
       {
@@ -76,9 +76,9 @@ export const members: MemberProfile[] = [
     profile:
       'これはダミーのプロフィール文です。\nボスについての説明文が入ります。',
     illustrations: [
-      { src: '/images/members/boss/illust-1.svg', alt: 'ボス 立ち絵 1（仮）' },
-      { src: '/images/members/boss/illust-2.svg', alt: 'ボス 立ち絵 2（仮）' },
-      { src: '/images/members/boss/illust-3.svg', alt: 'ボス 立ち絵 3（仮）' },
+      { src: '/images/kari.png', alt: 'ボス 立ち絵 1（仮）' },
+      { src: '/images/kari.png', alt: 'ボス 立ち絵 2（仮）' },
+      { src: '/images/kari.png', alt: 'ボス 立ち絵 3（仮）' },
     ],
     episodes: [
       {
@@ -115,9 +115,9 @@ export const members: MemberProfile[] = [
     profile:
       'これはダミーのプロフィール文です。\n司令官についての説明文が入ります。',
     illustrations: [
-      { src: '/images/members/shirei/illust-1.svg', alt: '司令官 立ち絵 1（仮）' },
-      { src: '/images/members/shirei/illust-2.svg', alt: '司令官 立ち絵 2（仮）' },
-      { src: '/images/members/shirei/illust-3.svg', alt: '司令官 立ち絵 3（仮）' },
+      { src: '/images/kari.png', alt: '司令官 立ち絵 1（仮）' },
+      { src: '/images/kari.png', alt: '司令官 立ち絵 2（仮）' },
+      { src: '/images/kari.png', alt: '司令官 立ち絵 3（仮）' },
     ],
     episodes: [
       {

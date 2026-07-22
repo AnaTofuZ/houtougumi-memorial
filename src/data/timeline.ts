@@ -10,10 +10,10 @@ export interface TimelineEvent {
 }
 
 export const categoryColors: Record<TimelineCategory, string> = {
-  '配信': '#7ECEC4',
-  'オフイベ': '#FFB7C5',
-  'グッズ販売': '#B39DDB',
-  '思い出': '#FF8FAB',
+  '配信': '#2AD1B2',
+  'オフイベ': '#EE3F87',
+  'グッズ販売': '#40ACFA',
+  '思い出': '#FF6FA8',
 };
 
 

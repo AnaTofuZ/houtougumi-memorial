@@ -17,7 +17,7 @@ function formatDate(dateStr: string) {
 
 <div class="relative">
   <!-- Vertical spine -->
-  <div class="absolute left-5 md:left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-[#E0D0F0]"></div>
+  <div class="absolute left-5 md:left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-[#FFD3E8]"></div>
 
   <div class="space-y-10">
     {
@@ -43,14 +43,14 @@ function formatDate(dateStr: string) {
                     {formatDate(event.date)}
                   </time>
                 </div>
-                <h3 class="font-bold text-base mb-1">{event.title}</h3>
-                <p class="text-sm text-[#444444] leading-relaxed">{event.description}</p>
+                <h3 class="font-bold text-lg mb-1">{event.title}</h3>
+                <p class="text-base text-[#444444] leading-[1.75]">{event.description}</p>
                 {event.link && (
                   <a
                     href={event.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1 mt-2 text-sm text-[#FF8FAB] font-medium hover:underline"
+                    class="inline-flex items-center gap-1 mt-2 text-sm text-[#EE3F87] font-medium hover:underline"
                   >
                     詳細を見る
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
