@@ -2,55 +2,51 @@
 ---
 
 <section
-  class="relative overflow-hidden min-h-[92vh] flex items-center"
+  class="relative overflow-hidden h-screen min-h-[640px] flex items-end md:items-center"
   data-scroll-bg="#FCE8F0"
 >
-  <div class="container mx-auto px-6 md:px-12 lg:px-16 py-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
+  <!-- 背景：全画面イラスト -->
+  <img
+    src="/images/kari.png"
+    alt="ほうとう組 イラスト（仮）"
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent md:bg-gradient-to-r md:from-black/55 md:via-black/15 md:to-transparent"></div>
 
-      <!-- 左：テキスト -->
-      <div class="fade-in-up" style="animation-delay: 0.1s">
-        <span class="tag bg-[#EE3F87] text-white mb-6 inline-block font-[--font-en] tracking-widest">
-          FAN SITE
-        </span>
+  <!-- テキスト：画像の上に重ねる -->
+  <div class="relative z-10 container mx-auto px-6 md:px-12 lg:px-16 pb-16 pt-24 md:py-16">
+    <div class="fade-in-up max-w-xl" style="animation-delay: 0.1s">
+      <span class="tag bg-[#C22368] text-white mb-6 inline-block font-[--font-en] tracking-widest">
+        FAN SITE
+      </span>
 
-        <h1 class="text-6xl md:text-7xl lg:text-8xl font-[--font-heading] font-extrabold mb-3 text-[#EE3F87] leading-tight">
-          ほうとう組
-        </h1>
+      <h1 class="text-6xl md:text-7xl lg:text-8xl font-[--font-heading] font-extrabold mb-3 text-white leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
+        ほうとう組
+      </h1>
 
-        <p class="text-sm font-[--font-en] font-bold text-[#40ACFA] mb-6 tracking-[0.3em]">
-          HOUTOU-GUMI
-        </p>
+      <p class="text-sm font-[--font-en] font-bold text-[#A7D9FF] mb-6 tracking-[0.3em]">
+        HOUTOU-GUMI
+      </p>
 
-        <p class="text-base md:text-lg text-[#333333] mb-3 leading-[1.8] max-w-sm">
-          これはダミーのキャッチコピーが入ります。<br>
-          ほうとう組の魅力を伝える文章がここに並びます。
-        </p>
-        <p class="text-sm text-[#696969] mb-10 max-w-sm">
-          ※ こちらはダミーテキストです。正式な文章は後日更新予定です。
-        </p>
+      <p class="text-base md:text-lg text-white mb-3 leading-[1.8] max-w-sm drop-shadow-[0_1px_6px_rgba(0,0,0,0.4)]">
+        これはダミーのキャッチコピーが入ります。<br>
+        ほうとう組の魅力を伝える文章がここに並びます。
+      </p>
+      <p class="text-sm text-white/80 mb-10 max-w-sm">
+        ※ こちらはダミーテキストです。正式な文章は後日更新予定です。
+      </p>
 
-        <div class="flex flex-wrap gap-4">
-          <a href="#members" class="btn-primary">
-            メンバーをみる
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </a>
-          <a href="#timeline" class="btn-outline">
-            あゆみを見る
-          </a>
-        </div>
+      <div class="flex flex-wrap gap-4">
+        <a href="#members" class="btn-primary group">
+          メンバーをみる
+          <svg class="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+        <a href="#timeline" class="btn-outline bg-white/10 backdrop-blur-sm border-white text-white">
+          あゆみを見る
+        </a>
       </div>
-
-      <!-- 右：イラストエリア（仮） -->
-      <div
-        class="hidden md:flex items-center justify-center rounded-3xl overflow-hidden border-2 border-dashed border-[#40ACFA]/50 bg-[#DDF0FF]/30 h-80 lg:h-[460px] fade-in-up"
-        style="animation-delay: 0.25s"
-      >
-        <img src="/images/kari.png" alt="ほうとう組 イラスト（仮）" class="w-full h-full object-cover" />
-      </div>
-
     </div>
   </div>
 </section>
