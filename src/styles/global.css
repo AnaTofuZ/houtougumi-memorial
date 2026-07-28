@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700;800;900&family=Quicksand:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ブランドカラー */
+  --color-primary: #EE3F87;
+  --color-primary-light: #FFE1EE;
+  --color-primary-soft: #FFB3D2;
+  --color-primary-dark: #C22368;
+
+  --color-secondary: #40ACFA;
+  --color-secondary-light: #DDF0FF;
+  --color-secondary-soft: #A7D9FF;
+  --color-secondary-dark: #1D86D9;
+
+  --color-accent: #2AD1B2;
+  --color-accent-light: #D8FBF3;
+  --color-accent-soft: #8FEBD9;
+  --color-accent-dark: #159E85;
+
+  --color-bg: #FFF3F8;
+  --color-surface: #FFFFFF;
+  --color-text: #35263A;
+  --color-muted: #6B5C6E;
+  --color-muted-soft: #8A7B8D;
+
+  /* メンバーカラー（キャラクター固有） */
+  --color-momojiru: #FFB7C5;
+  --color-momojiru-light: #FFE4EC;
+  --color-momojiru-dark: #C55070;
+  --color-boss: #B39DDB;
+  --color-boss-light: #EDE4FF;
+  --color-boss-dark: #6B4D9E;
+  --color-shirei: #7ECEC4;
+  --color-shirei-light: #C8F0EC;
+  --color-shirei-dark: #4BA89E;
+
+  --color-border: #FFD3E8;
+
+  --font-heading: 'Noto Sans JP', 'Hiragino Sans', 'M PLUS Rounded 1c', sans-serif;
+  --font-body: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+  --font-en: 'Quicksand', sans-serif;
+}
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.7s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    line-height: 1.4;
+  }
+
+  p {
+    line-height: 1.75;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .section-title::before,
+  .section-title::after {
+    content: '✦' / '';
+    color: var(--color-primary);
+    font-size: 0.9em;
+  }
+
+  .card {
+    background: var(--color-surface);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(238, 63, 135, 0.1);
+    border: 1px solid var(--color-border);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.25rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(238, 63, 135, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 22px rgba(238, 63, 135, 0.4);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: 9999px;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary-dark);
+    font-weight: 700;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-primary-light);
+    transform: translateY(-2px);
+  }
+
+  .text-momojiru-dark { color: var(--color-momojiru-dark); }
+  .text-boss-dark { color: var(--color-boss-dark); }
+  .text-shirei-dark { color: var(--color-shirei-dark); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+.float-anim {
+  animation: float 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-up, .float-anim {
+    animation: none;
+  }
+}

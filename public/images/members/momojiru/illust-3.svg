@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450" width="300" height="450">
+  <defs>
+    <linearGradient id="bg" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5FA"/>
+      <stop offset="100%" stop-color="#FFB7C5"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="450" fill="url(#bg)" rx="16"/>
+  <circle cx="150" cy="60" r="20" fill="#FF8FAB" opacity="0.3"/>
+  <ellipse cx="150" cy="148" rx="52" ry="58" fill="#FF8FAB" opacity="0.6"/>
+  <path d="M98 218 Q150 260 202 218 L210 395 Q150 428 90 395 Z" fill="#FFB7C5" opacity="0.55"/>
+  <text x="150" y="430" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#E8789A" font-weight="bold">桃汁ちゃん</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450" width="300" height="450">
+  <defs>
+    <linearGradient id="bg" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#F8F5FF"/>
+      <stop offset="100%" stop-color="#B39DDB"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="450" fill="url(#bg)" rx="16"/>
+  <circle cx="150" cy="60" r="20" fill="#9B7FCC" opacity="0.3"/>
+  <ellipse cx="150" cy="148" rx="52" ry="58" fill="#B39DDB" opacity="0.6"/>
+  <path d="M98 218 Q150 260 202 218 L210 395 Q150 428 90 395 Z" fill="#B39DDB" opacity="0.55"/>
+  <text x="150" y="430" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#7E5CB5" font-weight="bold">ボス</text>
+</svg>
