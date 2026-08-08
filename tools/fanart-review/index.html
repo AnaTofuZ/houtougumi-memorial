@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ファンアート除外レビュー</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #fff7fa; color: #31262b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { position: sticky; top: 0; z-index: 2; padding: 16px max(16px, calc((100% - 1200px) / 2)); background: #fff7faee; border-bottom: 1px solid #eadbe1; backdrop-filter: blur(12px); }
+    h1 { margin: 0 0 4px; font-size: 1.35rem; }
+    header p { margin: 0 0 12px; color: #6c5b63; font-size: .9rem; }
+    .controls { display: grid; grid-template-columns: minmax(180px, 1fr) auto auto auto; gap: 8px; }
+    input[type="search"], textarea, button { border: 1px solid #d7c4cc; border-radius: 10px; background: white; color: inherit; font: inherit; }
+    input[type="search"] { min-width: 0; padding: 10px 12px; }
+    button { padding: 9px 13px; cursor: pointer; font-weight: 700; }
+    button.primary { border-color: #d92e75; background: #d92e75; color: white; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline: 3px solid #ff9bc4; outline-offset: 2px; }
+    .output { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 8px; }
+    textarea { min-height: 42px; resize: vertical; padding: 9px 11px; }
+    main { max-width: 1200px; margin: 0 auto; padding: 18px 16px 64px; }
+    #status { margin: 0 0 14px; color: #6c5b63; }
+    #posts { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+    article { overflow: hidden; border: 2px solid transparent; border-radius: 16px; background: white; box-shadow: 0 3px 14px #63324714; }
+    article.selected { border-color: #d92e75; background: #fff0f6; }
+    .post-head { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; padding: 13px; }
+    .post-head input { width: 22px; height: 22px; accent-color: #d92e75; }
+    .author { font-weight: 750; }
+    .meta { color: #78666e; font-size: .8rem; }
+    .source { color: #b11e5d; font-weight: 700; text-decoration: none; }
+    .text { max-height: 11rem; overflow: auto; margin: 0; padding: 0 13px 13px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .9rem; line-height: 1.55; }
+    .media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; background: #eadbe1; }
+    .media-item { position: relative; min-width: 0; }
+    .media-item.selected { box-shadow: inset 0 0 0 5px #d92e75; }
+    .media-check { position: absolute; z-index: 1; top: 8px; left: 8px; display: flex; align-items: center; gap: 5px; padding: 6px 9px; border-radius: 999px; background: #fffffff2; font-size: .78rem; font-weight: 800; box-shadow: 0 2px 8px #0003; }
+    .media-check input { width: 19px; height: 19px; margin: 0; accent-color: #d92e75; }
+    .media :is(img, video) { display: block; width: 100%; height: 260px; object-fit: contain; background: #251e21; }
+    .media-item:only-child { grid-column: 1 / -1; }
+    .empty { padding: 48px 0; text-align: center; color: #78666e; }
+    @media (max-width: 680px) {
+      header { position: static; }
+      .controls { grid-template-columns: 1fr 1fr; }
+      .controls input { grid-column: 1 / -1; }
+      #posts { grid-template-columns: 1fr; }
+      .media :is(img, video) { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ファンアート除外レビュー</h1>
+    <p>無関係な投稿全体、または個別の画像・動画を選択し、IDをコピーしてCodexへ渡してください。選択状態はこのブラウザに保存されます。</p>
+    <div class="controls">
+      <input id="search" type="search" placeholder="本文・作者・IDを検索" aria-label="投稿を検索">
+      <button id="selected-only" type="button" aria-pressed="false">選択のみ</button>
+      <button id="clear" type="button">全解除</button>
+      <button id="copy" type="button" class="primary">IDをコピー</button>
+    </div>
+    <div class="output">
+      <textarea id="output" readonly aria-label="選択したツイートID"></textarea>
+      <button id="select-output" type="button">文字列を選択</button>
+    </div>
+  </header>
+  <main>
+    <p id="status" role="status">読み込み中…</p>
+    <section id="posts" aria-label="ファンアート投稿"></section>
+  </main>
+  <script>
+    const storageKey = 'houtougumi-fanart-exclusions';
+    const selected = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+    const postsElement = document.querySelector('#posts');
+    const statusElement = document.querySelector('#status');
+    const outputElement = document.querySelector('#output');
+    const searchElement = document.querySelector('#search');
+    const selectedOnlyButton = document.querySelector('#selected-only');
+    let posts = [];
+    let selectedOnly = false;
+
+    const tweetId = (url) => url.match(/\/status\/(\d+)/)?.[1] || url;
+    const mediaKey = (url) => new URL(url).pathname.split('/').at(-1);
+    const escapeHtml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    const save = () => {
+      const ids = [...selected].sort();
+      localStorage.setItem(storageKey, JSON.stringify(ids));
+      outputElement.value = ids.join(', ');
+    };
+    const render = () => {
+      const query = searchElement.value.trim().toLowerCase();
+      const visible = posts.filter((post) => {
+        const id = tweetId(post.sourceUrl);
+        const hasSelection = selected.has(id) || post.media.some((item) => selected.has(`${id}#${mediaKey(item.url)}`));
+        return (!selectedOnly || hasSelection) && (!query || `${id}\n${post.author.name}\n${post.author.handle}\n${post.text}`.toLowerCase().includes(query));
+      });
+      postsElement.innerHTML = visible.map((post) => {
+        const id = tweetId(post.sourceUrl);
+        const checked = selected.has(id);
+        const media = post.media.map((item, index) => {
+          const token = `${id}#${mediaKey(item.url)}`;
+          const mediaChecked = selected.has(token);
+          const content = item.type === 'video'
+            ? `<video controls preload="metadata" poster="${escapeHtml(item.posterUrl)}" aria-label="${escapeHtml(post.author.name)}さんの動画${index + 1}"><source src="${escapeHtml(item.url)}" type="video/mp4"></video>`
+            : `<img src="${escapeHtml(item.url)}" alt="${escapeHtml(post.author.name)}さんの画像${index + 1}" loading="lazy">`;
+          return `<div class="media-item ${mediaChecked ? 'selected' : ''}">
+            <label class="media-check"><input type="checkbox" data-kind="media" data-token="${escapeHtml(token)}" ${mediaChecked ? 'checked' : ''} ${checked ? 'disabled' : ''}>単体除外</label>${content}
+          </div>`;
+        }).join('');
+        return `<article class="${checked ? 'selected' : ''}" data-id="${id}">
+          <div class="post-head">
+            <input type="checkbox" data-kind="post" data-token="${id}" ${checked ? 'checked' : ''} aria-label="${id}を投稿ごと除外する">
+            <div><div class="author">${escapeHtml(post.author.name)} <span class="meta">${escapeHtml(post.author.handle)}</span></div><div class="meta">${post.postedAt.slice(0, 10)} · ${id}</div></div>
+            <a class="source" href="${escapeHtml(post.sourceUrl)}" target="_blank" rel="noopener noreferrer">元投稿 ↗</a>
+          </div>
+          <p class="text">${escapeHtml(post.text)}</p>
+          <div class="media">${media}</div>
+        </article>`;
+      }).join('') || '<p class="empty">該当する投稿はありません。</p>';
+      const selectedPosts = [...selected].filter((token) => !token.includes('#')).length;
+      statusElement.textContent = `${visible.length} / ${posts.length}投稿を表示 · ${selectedPosts}投稿・${selected.size - selectedPosts}媒体を選択`;
+    };
+
+    postsElement.addEventListener('change', (event) => {
+      if (!event.target.matches('input[data-token]')) return;
+      const article = event.target.closest('article');
+      const token = event.target.dataset.token;
+      if (event.target.checked) {
+        selected.add(token);
+        if (event.target.dataset.kind === 'post') {
+          for (const value of selected) if (value.startsWith(`${article.dataset.id}#`)) selected.delete(value);
+        }
+      } else selected.delete(token);
+      save();
+      render();
+    });
+    searchElement.addEventListener('input', render);
+    selectedOnlyButton.addEventListener('click', () => {
+      selectedOnly = !selectedOnly;
+      selectedOnlyButton.setAttribute('aria-pressed', String(selectedOnly));
+      selectedOnlyButton.textContent = selectedOnly ? 'すべて表示' : '選択のみ';
+      render();
+    });
+    document.querySelector('#clear').addEventListener('click', () => {
+      if (selected.size && !confirm(`${selected.size}件の選択を解除しますか？`)) return;
+      selected.clear();
+      save();
+      render();
+    });
+    document.querySelector('#copy').addEventListener('click', async (event) => {
+      try {
+        await navigator.clipboard.writeText(outputElement.value);
+        event.target.textContent = 'コピー済み';
+        setTimeout(() => { event.target.textContent = 'IDをコピー'; }, 1200);
+      } catch { outputElement.select(); }
+    });
+    document.querySelector('#select-output').addEventListener('click', () => outputElement.select());
+
+    fetch('/data').then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    }).then((data) => {
+      const seen = new Set();
+      posts = data.posts.flatMap((post) => {
+        const media = post.media.filter((item) => !seen.has(item.url) && seen.add(item.url));
+        return media.length ? [{ ...post, media }] : [];
+      });
+      const currentIds = new Set(posts.flatMap((post) => {
+        const id = tweetId(post.sourceUrl);
+        return [id, ...post.media.map((item) => `${id}#${mediaKey(item.url)}`)];
+      }));
+      for (const id of selected) if (!currentIds.has(id)) selected.delete(id);
+      save();
+      render();
+    }).catch((error) => { statusElement.textContent = `読み込みに失敗しました: ${error.message}`; });
+  </script>
+</body>
+</html>
