@@ -29,6 +29,7 @@ export default defineConfig({
     },
   ],
   integrations: [react()],
+  prefetch: true,
 
   vite: {
     plugins: [tailwindcss()]
