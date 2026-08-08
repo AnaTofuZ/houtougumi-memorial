@@ -6,6 +6,9 @@ const media = await readJson('../data/fanart-media.json');
 const patrol = await readJson('../data/fanart-patrol-media.json');
 const collage = await readJson('../data/fanart-collage-media.json');
 const natao = await readJson('../data/fanart-natao-media.json');
+const exclusions = await readJson('../data/x/fanart-excluded-ids.json');
+const excludedIds = new Set(exclusions.posts);
+const excludedMedia = new Set(exclusions.media);
 const outputUrl = new URL('../data/fanart-twitter-merged.json', import.meta.url);
 const assetBase = 'https://assets.houtougumi-memorial.anatofuz.net';
 
@@ -84,7 +87,11 @@ for (const post of natao.posts) {
   });
 }
 
-const merged = [...posts.values()].sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
+const merged = [...posts.values()]
+  .filter((post) => !excludedIds.has(post.sourceUrl.match(/\/status\/(\d+)/)?.[1]))
+  .map((post) => ({ ...post, media: post.media.filter((item) => !excludedMedia.has(item.url.split('/').at(-1))) }))
+  .filter((post) => post.media.length)
+  .sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
 if (new Set(merged.map((post) => post.sourceUrl)).size !== merged.length) throw new Error('投稿URLが重複しています');
 if (merged.some((post, index) => index && Date.parse(merged[index - 1].postedAt) < Date.parse(post.postedAt))) {
   throw new Error('投稿が新しい順に並んでいません');

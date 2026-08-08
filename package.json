@@ -11,6 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "preview:cloudflare": "npm run build && wrangler dev",
+    "review:fanart": "node scripts/serve-fanart-review.mjs",
     "deploy": "npm run build && wrangler deploy",
     "astro": "astro"
   },

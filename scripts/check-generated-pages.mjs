@@ -13,8 +13,8 @@ const verify = (name, entries, marker, expected) => {
 };
 
 verify('コメント', matching(/^comments(?:\/\d+)?\/index\.html$/), /<div data-comment-card/g, 272);
-verify('ファンアート', matching(/^fanart(?:\/\d+)?\/index\.html$/), /<button[^>]+data-fanart-card/g, 548);
-verify('桃汁ぱとろーる', matching(/^fanart\/tag\/桃汁ぱとろーる(?:\/\d+)?\/index\.html$/), /<button[^>]+data-fanart-card/g, 412);
-verify('桃汁クソコラグランプリ', matching(/^fanart\/tag\/桃汁クソコラグランプリ(?:\/\d+)?\/index\.html$/), /<button[^>]+data-fanart-card/g, 136);
+verify('ファンアート', matching(/^fanart(?:\/\d+)?\/index\.html$/), /<button[^>]+data-fanart-card/g, 502);
+verify('桃汁ぱとろーる', matching(/^fanart\/tag\/桃汁ぱとろーる(?:\/\d+)?\/index\.html$/), /<button[^>]+data-fanart-card/g, 367);
+verify('桃汁クソコラグランプリ', matching(/^fanart\/tag\/桃汁クソコラグランプリ(?:\/\d+)?\/index\.html$/), /<button[^>]+data-fanart-card/g, 135);
 if (![...pages.values()].some((html) => html.includes('2037849175753400370'))) throw new Error('指定ファンアートがありません');
-console.log('comments 12 pages; fanart 23 pages; patrol 18 pages; collage 6 pages');
+console.log('comments 12 pages; fanart 21 pages; patrol 16 pages; collage 6 pages');
