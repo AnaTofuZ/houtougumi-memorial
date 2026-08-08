@@ -3,6 +3,7 @@ import { extname, relative } from 'node:path';
 import { spawn } from 'node:child_process';
 
 const bucket = 'houtougumi-memorial-assets';
+const nataoOnly = process.argv.includes('--natao');
 const roots = [
   { directory: new URL('../src/assets/images/fanart/', import.meta.url), prefix: 'fanart/images' },
   { directory: new URL('../src/assets/images/comments/avatars/', import.meta.url), prefix: 'comments/avatars' },
@@ -33,6 +34,7 @@ for (const root of roots) {
   for (const entry of await readdir(root.directory, { recursive: true, withFileTypes: true })) {
     if (!entry.isFile()) continue;
     const file = new URL(entry.name, new URL(`${entry.parentPath}/`, root.directory));
+    if (nataoOnly && !file.pathname.includes('/twitter-natao/') && !file.pathname.includes('/fanart/natao/')) continue;
     const contentType = contentTypes.get(extname(entry.name).toLowerCase());
     if (!contentType) throw new Error(`未対応の媒体です: ${file.pathname}`);
     files.push({

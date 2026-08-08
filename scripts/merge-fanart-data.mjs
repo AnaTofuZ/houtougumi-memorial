@@ -5,6 +5,7 @@ const twitter = await readJson('../data/fanart-twitter-export.json');
 const media = await readJson('../data/fanart-media.json');
 const patrol = await readJson('../data/fanart-patrol-media.json');
 const collage = await readJson('../data/fanart-collage-media.json');
+const natao = await readJson('../data/fanart-natao-media.json');
 const outputUrl = new URL('../data/fanart-twitter-merged.json', import.meta.url);
 const assetBase = 'https://assets.houtougumi-memorial.anatofuz.net';
 
@@ -71,6 +72,18 @@ for (const post of collage.posts) {
   });
 }
 
+for (const post of natao.posts) {
+  if (posts.has(post.sourceUrl)) continue;
+  posts.set(post.sourceUrl, {
+    sourceUrl: post.sourceUrl,
+    author: post.author,
+    postedAt: post.postedAt,
+    text: post.text,
+    tags: ['桃汁ぱとろーる'],
+    media: post.media.map(remoteMedia),
+  });
+}
+
 const merged = [...posts.values()].sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
 if (new Set(merged.map((post) => post.sourceUrl)).size !== merged.length) throw new Error('投稿URLが重複しています');
 if (merged.some((post, index) => index && Date.parse(merged[index - 1].postedAt) < Date.parse(post.postedAt))) {
@@ -79,7 +92,7 @@ if (merged.some((post, index) => index && Date.parse(merged[index - 1].postedAt)
 
 await writeFile(outputUrl, `${JSON.stringify({
   generatedAt: new Date().toISOString(),
-  sources: ['#桃汁ぱとろーる', '#桃汁クソコラグランプリ'],
+  sources: ['#桃汁ぱとろーる', '#桃汁クソコラグランプリ', '@natao1212'],
   count: merged.length,
   posts: merged,
 }, null, 2)}\n`);

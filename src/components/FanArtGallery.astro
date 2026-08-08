@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import type { FanArt } from '../data/fanart';
 
 interface Props {
@@ -10,6 +10,9 @@ interface Props {
 
 const { artworks, filters, currentTag } = Astro.props;
 const filterHref = (tag?: string) => tag ? `/fanart/tag/${encodeURIComponent(tag)}/` : '/fanart/';
+const dialogMedia = await Promise.all(artworks.map(async (art) => art.type === 'video'
+  ? art.src
+  : (await getImage({ src: art.image, width: 1600, height: 1600, fit: 'contain', format: 'webp' })).src));
 ---
 
 <div data-fanart-gallery>
@@ -28,7 +31,7 @@ const filterHref = (tag?: string) => tag ? `/fanart/tag/${encodeURIComponent(tag
           class="block aspect-square w-full text-left rounded-2xl overflow-hidden cursor-pointer group relative shadow-sm hover:shadow-lg transition-shadow bg-[#FFD6E0]"
           data-fanart-card
           data-type={art.type}
-          data-media-src={art.type === 'video' ? art.src : undefined}
+          data-media-src={dialogMedia[idx]}
           data-title={art.alt}
           data-artist={art.artist}
           data-artist-link={art.artistLink}
@@ -162,7 +165,7 @@ const filterHref = (tag?: string) => tag ? `/fanart/tag/${encodeURIComponent(tag
         video.pause();
         video.classList.add('hidden');
         image.classList.remove('hidden');
-        image.src = previewSrc;
+        image.src = card.dataset.mediaSrc || previewSrc;
         image.alt = card.dataset.title || '';
       }
       if (!dialog.open) dialog.showModal();
