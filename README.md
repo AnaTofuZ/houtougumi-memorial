@@ -21,6 +21,8 @@ npm audit --omit=dev
 
 ローカル画像は原則 `src/assets/` に置き、`astro:assets` の `Image` または `Picture` で最適化します。OGP画像やfaviconなど、固定URLで直接参照する必要がある素材だけ `public/` に置きます。
 
+生成HTMLへ残る `<!-- ... -->` コメントは、公開上の意図がある場合だけ使用します。実装上のメモはフロントマターやTypeScript内のコメントに置きます。
+
 ## Cloudflare Workers
 
 公開先: <https://houtougumi-memorial.anatofuz.net/>

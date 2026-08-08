@@ -9,7 +9,6 @@ function formatDate(str: string) {
 ---
 
 <BaseLayout title="音楽" description="「ほうとう組。」のオリジナル曲をまとめたページです。">
-  <!-- Page hero -->
   <section class="pt-16 pb-10" data-scroll-bg="#D8FBF3">
     <div class="container mx-auto px-4 md:px-6 text-center">
       <p class="tag text-white mb-4 inline-block bg-[#159E85] font-bold">MUSIC</p>
@@ -20,27 +19,23 @@ function formatDate(str: string) {
     </div>
   </section>
 
-  <!-- Featured song -->
   {featuredSong && (
     <section class="pb-16" data-scroll-bg="#D8FBF3">
       <div class="container mx-auto px-4 md:px-6">
         <div class="max-w-2xl mx-auto">
           <div class="card p-0 overflow-hidden">
-            <!-- Header -->
             <div class="px-6 py-5 text-white bg-[#159E85]">
               <span class="tag bg-white/20 text-white text-xs mb-2 inline-block">FEATURED</span>
               <h2 class="text-2xl font-bold font-[--font-heading]">{featuredSong.title}</h2>
               <p class="text-sm opacity-80 mt-1">{featuredSong.artists}</p>
             </div>
 
-            <!-- YouTube embed -->
             {featuredSong.youtubeId && (
               <div class="p-4">
                 <YoutubeEmbed videoId={featuredSong.youtubeId} title={featuredSong.title} />
               </div>
             )}
 
-            <!-- Description -->
             <div class="px-6 pb-6">
               <p class="text-base text-[#1A1A1A] leading-[1.75] mb-3">{featuredSong.description}</p>
               <div class="flex flex-wrap items-center gap-3">
@@ -71,7 +66,6 @@ function formatDate(str: string) {
     </section>
   )}
 
-  <!-- All songs list -->
   <section class="pb-20 py-16" data-scroll-bg="#D8FBF3">
     <div class="container mx-auto px-4 md:px-6">
       <h2 class="section-title text-xl md:text-2xl mb-8">すべての楽曲</h2>

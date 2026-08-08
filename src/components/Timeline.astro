@@ -16,7 +16,6 @@ function formatDate(dateStr: string) {
 ---
 
 <div class="relative">
-  <!-- Vertical spine -->
   <div class="absolute left-5 md:left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-[#FFD3E8]"></div>
 
   <div class="space-y-10">
@@ -25,14 +24,12 @@ function formatDate(dateStr: string) {
         const isEven = index % 2 === 0;
         return (
           <div class={`relative flex md:gap-8 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-            <!-- Timeline dot -->
             <div
               class="absolute left-5 md:left-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-white shadow-md flex items-center justify-center z-10"
               style={`background-color: ${categoryColors[event.category]}`}
             >
             </div>
 
-            <!-- Card side -->
             <div class={`pl-14 md:pl-0 md:w-1/2 ${isEven ? 'md:pr-10' : 'md:pl-10'}`}>
               <div class="card hover:shadow-lg transition-shadow group">
                 <div class="flex flex-wrap items-center gap-2 mb-2">
@@ -61,7 +58,6 @@ function formatDate(dateStr: string) {
               </div>
             </div>
 
-            <!-- Empty spacer for alternating layout -->
             <div class="hidden md:block md:w-1/2" />
           </div>
         );
