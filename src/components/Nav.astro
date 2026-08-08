@@ -1,9 +1,9 @@
 ---
 const navLinks = [
-  { href: '/music', label: '音楽' },
-  { href: '/fanart', label: 'ファンイラスト' },
-  { href: '/comments', label: 'コメント集' },
-  { href: '/goods', label: 'グッズ' },
+  { href: '/music', label: '音楽', prefetch: 'hover' },
+  { href: '/fanart', label: 'ファンイラスト', prefetch: 'hover' },
+  { href: '/comments', label: 'コメント集', prefetch: 'load' },
+  { href: '/goods', label: 'グッズ', prefetch: 'load' },
 ];
 
 const members = [
@@ -62,7 +62,7 @@ const members = [
         </div>
       </div>
 
-      {navLinks.map((link) => <a href={link.href} data-astro-prefetch class="hover:text-[#EE3F87] transition-colors">{link.label}</a>)}
+      {navLinks.map((link) => <a href={link.href} data-astro-prefetch={link.prefetch} class="hover:text-[#EE3F87] transition-colors">{link.label}</a>)}
     </div>
 
     <button
@@ -100,7 +100,7 @@ const members = [
       </div>
       {
         navLinks.map((link) => (
-          <a href={link.href} data-astro-prefetch="tap" class="block py-2 px-3 rounded-xl text-sm font-medium hover:bg-[#FFE9F3] transition-colors">
+          <a href={link.href} data-astro-prefetch={link.prefetch === 'load' ? 'load' : 'tap'} class="block py-2 px-3 rounded-xl text-sm font-medium hover:bg-[#FFE9F3] transition-colors">
             {link.label}
           </a>
         ))
