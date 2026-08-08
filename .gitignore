@@ -20,6 +20,7 @@ pnpm-debug.log*
 
 # downloaded media is stored in R2
 src/assets/images/fanart/
+src/assets/images/comments/avatars/
 public/media/fanart/
 public/media/fanart-patrol/
 

@@ -5,6 +5,7 @@ import { spawn } from 'node:child_process';
 const bucket = 'houtougumi-memorial-assets';
 const roots = [
   { directory: new URL('../src/assets/images/fanart/', import.meta.url), prefix: 'fanart/images' },
+  { directory: new URL('../src/assets/images/comments/avatars/', import.meta.url), prefix: 'comments/avatars' },
   { directory: new URL('../public/media/fanart/', import.meta.url), prefix: 'fanart/videos' },
 ];
 const contentTypes = new Map([
