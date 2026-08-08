@@ -1,5 +1,6 @@
 import source from '../../data/x/arigato-nasu-houtougumi.json';
-import fanCommentIds from '../../data/x/fan-comment-ids.json';
+import excludedIds from '../../data/x/fan-comment-excluded-ids.json';
+import sourceOverrides from '../../data/x/fan-comment-source-overrides.json';
 
 export interface FanComment {
   id: string;
@@ -12,24 +13,26 @@ export interface FanComment {
   platform: 'X';
 }
 
-const postsById = new Map(source.posts.map((post) => [post.id, post]));
 const assetRoot = 'https://assets.houtougumi-memorial.anatofuz.net/comments/avatars';
+const excluded = new Set(excludedIds);
+const overrides = new Map(sourceOverrides.map(({ wrapperId, ...post }) => [wrapperId, post]));
 
-export const fanComments: FanComment[] = fanCommentIds.flatMap((id) => {
-  const post = postsById.get(id);
-  if (!post) return [];
+export const fanComments: FanComment[] = source.posts.flatMap((post) => {
+  if (excluded.has(post.id)) return [];
+  const displayed = overrides.get(post.id) ?? post;
   const avatarName = new URL(post.author.avatarUrl).pathname.split('/').at(-1);
   if (!avatarName) return [];
   return [{
-    id,
+    id: displayed.id,
     name: post.author.displayName,
     handle: post.author.handle,
-    comment: post.text,
-    date: post.postedAt.slice(0, 10),
-    sourceLink: post.url,
+    comment: displayed.text,
+    date: displayed.postedAt.slice(0, 10),
+    sourceLink: displayed.url,
     avatar: `${assetRoot}/${avatarName}`,
     platform: 'X',
   }];
 });
 
-if (fanComments.length !== fanCommentIds.length) throw new Error('ファンコメントの元投稿が不足しています');
+if (fanComments.length !== source.posts.length - excluded.size) throw new Error('ファンコメントの除外件数が不正です');
+if (new Set(fanComments.map((comment) => comment.id)).size !== fanComments.length) throw new Error('ファンコメントが重複しています');

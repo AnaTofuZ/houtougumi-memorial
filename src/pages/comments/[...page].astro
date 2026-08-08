@@ -1,7 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { fanComments } from '../data/comments';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { fanComments } from '../../data/comments';
+
+export function getStaticPaths() {
+  const pages = Math.ceil(fanComments.length / 24);
+  return Array.from({ length: pages }, (_, index) => ({
+    params: { page: index ? String(index + 1) : undefined },
+    props: { page: index + 1 },
+  }));
+}
+
+const { page } = Astro.props;
 
 const cardBgs = [
   '#FFE4EC',
@@ -11,6 +21,10 @@ const cardBgs = [
   '#D8FBF3',
   '#DDF0FF',
 ];
+const pageSize = 24;
+const pageCount = Math.ceil(fanComments.length / pageSize);
+const pageComments = fanComments.slice((page - 1) * pageSize, page * pageSize);
+const pageHref = (target: number) => target === 1 ? '/comments/' : `/comments/${target}/`;
 ---
 
 <BaseLayout title="コメント集" description="「ほうとう組。」へのファンコメント集です。">
@@ -28,8 +42,9 @@ const cardBgs = [
     <div class="container mx-auto px-4 md:px-6">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
         {
-          fanComments.map((c, idx) => (
+          pageComments.map((c, idx) => (
             <div
+              data-comment-card
               class="rounded-2xl p-5 border border-[#CFE9FF] shadow-sm hover:shadow-md transition-shadow"
               style={`background-color: ${cardBgs[idx % cardBgs.length]}`}
             >
@@ -55,6 +70,13 @@ const cardBgs = [
           ))
         }
       </div>
+      {pageCount > 1 && (
+        <nav class="mt-8 flex items-center justify-center gap-4" aria-label="コメントのページ">
+          {page > 1 ? <a href={pageHref(page - 1)} class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] shadow-sm">前へ</a> : <span aria-disabled="true" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] opacity-40">前へ</span>}
+          <span class="text-sm font-bold text-[#444444]">{page} / {pageCount}</span>
+          {page < pageCount ? <a href={pageHref(page + 1)} class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] shadow-sm">次へ</a> : <span aria-disabled="true" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] opacity-40">次へ</span>}
+        </nav>
+      )}
     </div>
   </section>
 </BaseLayout>

@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FanArtGallery from '../../components/FanArtGallery.astro';
+import { fanarts } from '../../data/fanart';
+
+const pageSize = 24;
+const filters = [...new Set(fanarts.flatMap((art) => art.tags))];
+
+export function getStaticPaths() {
+  const routeFilters = [...new Set(fanarts.flatMap((art) => art.tags))];
+  return [undefined, ...routeFilters].flatMap((tag) => {
+    const artworks = tag ? fanarts.filter((art) => art.tags.includes(tag)) : fanarts;
+    return Array.from({ length: Math.ceil(artworks.length / 24) }, (_, index) => {
+      const page = index + 1;
+      const base = tag ? `tag/${tag}` : '';
+      return {
+        params: { path: [base, page > 1 ? String(page) : ''].filter(Boolean).join('/') || undefined },
+        props: { page, tag },
+      };
+    });
+  });
+}
+
+const { page, tag } = Astro.props;
+const filtered = tag ? fanarts.filter((art) => art.tags.includes(tag)) : fanarts;
+const artworks = filtered.slice((page - 1) * pageSize, page * pageSize);
+const pageCount = Math.ceil(filtered.length / pageSize);
+const pageHref = (target: number) => {
+  const base = tag ? `/fanart/tag/${encodeURIComponent(tag)}/` : '/fanart/';
+  return target === 1 ? base : `${base}${target}/`;
+};
+---
+
+<BaseLayout title="ファンイラスト" description="「ほうとう組。」のファンイラスト集です。">
+  <section class="pt-16 pb-10" data-scroll-bg="#FFE1EE">
+    <div class="container mx-auto px-4 md:px-6 text-center">
+      <p class="tag text-white mb-4 inline-block bg-[#EE3F87] font-bold">FAN ART</p>
+      <h1 class="text-4xl md:text-5xl font-(family-name:--font-heading) font-extrabold mb-3 text-[#EE3F87]">
+        ファンイラスト集
+      </h1>
+      <p class="text-base text-[#595959]">「#桃汁ぱとろーる」などに寄せられた作品を紹介します。</p>
+    </div>
+  </section>
+
+  <section class="pb-20" data-scroll-bg="#FFE1EE">
+    <div class="container mx-auto px-4 md:px-6">
+      {artworks.length > 0 ? (
+        <>
+          <FanArtGallery artworks={artworks} filters={filters} currentTag={tag} />
+          {pageCount > 1 && (
+            <nav class="mt-8 flex items-center justify-center gap-4" aria-label="ファンアートのページ">
+              {page > 1 ? <a href={pageHref(page - 1)} class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#EE3F87] shadow-sm">前へ</a> : <span aria-disabled="true" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#EE3F87] opacity-40">前へ</span>}
+              <span class="text-sm font-bold text-[#444444]">{page} / {pageCount}</span>
+              {page < pageCount ? <a href={pageHref(page + 1)} class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#EE3F87] shadow-sm">次へ</a> : <span aria-disabled="true" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#EE3F87] opacity-40">次へ</span>}
+            </nav>
+          )}
+        </>
+      ) : (
+        <div class="text-center py-20 text-[#444444]">
+          <p>ファンイラストを募集中です。</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="pb-20" data-scroll-bg="#FFE1EE">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="card max-w-lg mx-auto text-center">
+        <h2 class="text-lg font-bold mb-2">ファンイラスト掲載について</h2>
+        <p class="text-base text-[#444444] leading-[1.75]">
+          掲載許可をいただいた作品を紹介しています。作品を選ぶと作者と元投稿を確認できます。
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

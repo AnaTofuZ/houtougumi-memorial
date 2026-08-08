@@ -1,8 +1,8 @@
 {
-  "exportedAt": "2026-08-08T10:18:20.000Z",
+  "exportedAt": "2026-08-08T11:53:16.194Z",
   "query": "#桃汁パトロール",
   "source": "X latest search",
-  "count": 19,
+  "count": 20,
   "posts": [
     {
       "sourceUrl": "https://x.com/grassvase_2/status/2037893657194586243",
@@ -21,6 +21,27 @@
           "sourceUrl": "https://pbs.twimg.com/media/HEgNPE7bcAAuOPq.jpg?name=orig",
           "width": 1416,
           "height": 2000
+        }
+      ],
+      "replyTo": null
+    },
+    {
+      "sourceUrl": "https://x.com/romadeco_0A0/status/2037849175753400370",
+      "id": "2037849175753400370",
+      "author": {
+        "name": "める子*お仕事募集中",
+        "handle": "@romadeco_0A0",
+        "url": "https://x.com/romadeco_0A0"
+      },
+      "postedAt": "2026-03-28T11:07:59.000Z",
+      "text": "💕💖✨🤝😊\n#運営きいてくれ #ありがとナスほうとう組",
+      "media": [
+        {
+          "type": "image",
+          "id": "2037848661682720768",
+          "sourceUrl": "https://pbs.twimg.com/media/HEfkj5GakAAh6SN.jpg?name=orig",
+          "width": 1063,
+          "height": 746
         }
       ],
       "replyTo": null

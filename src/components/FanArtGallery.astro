@@ -4,18 +4,19 @@ import type { FanArt } from '../data/fanart';
 
 interface Props {
   artworks: FanArt[];
+  filters: string[];
+  currentTag?: string;
 }
 
-const { artworks } = Astro.props;
-const firstPreview = artworks[0].type === 'video' ? artworks[0].poster : artworks[0].image;
-const filters = [...new Set(artworks.flatMap((art) => art.tags))];
+const { artworks, filters, currentTag } = Astro.props;
+const filterHref = (tag?: string) => tag ? `/fanart/tag/${encodeURIComponent(tag)}/` : '/fanart/';
 ---
 
 <div data-fanart-gallery>
   <div class="mb-6 flex flex-wrap justify-center gap-2" aria-label="タグで絞り込む">
-    <button type="button" data-fanart-filter="" aria-pressed="true" class="rounded-full bg-[#EE3F87] px-4 py-2 text-sm font-bold text-white">すべて</button>
+    <a href={filterHref()} aria-current={!currentTag ? 'page' : undefined} class:list={['rounded-full px-4 py-2 text-sm font-bold shadow-sm', !currentTag ? 'bg-[#EE3F87] text-white' : 'bg-white text-[#EE3F87]']}>すべて</a>
     {filters.map((tag) => (
-      <button type="button" data-fanart-filter={tag} aria-pressed="false" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#EE3F87] shadow-sm">#{tag}</button>
+      <a href={filterHref(tag)} aria-current={currentTag === tag ? 'page' : undefined} class:list={['rounded-full px-4 py-2 text-sm font-bold shadow-sm', currentTag === tag ? 'bg-[#EE3F87] text-white' : 'bg-white text-[#EE3F87]']}>#{tag}</a>
     ))}
   </div>
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -33,12 +34,12 @@ const filters = [...new Set(artworks.flatMap((art) => art.tags))];
           data-artist-link={art.artistLink}
           data-source-link={art.sourceLink}
           data-tags={art.tags.map((tag) => `#${tag}`).join(' ')}
-          data-filter-tags={art.tags.join('|')}
         >
           <Image
             src={preview}
             alt={art.alt}
-            inferSize
+            width={800}
+            height={800}
             format="webp"
             loading={idx === 0 ? 'eager' : 'lazy'}
             priority={idx === 0}
@@ -90,12 +91,9 @@ const filters = [...new Set(artworks.flatMap((art) => art.tags))];
       >
         ✕
       </button>
-      <Image
+      <img
         data-fanart-image
-        src={firstPreview}
         alt=""
-        inferSize
-        format="webp"
         class="w-full max-h-[75vh] object-contain block"
       />
       <video data-fanart-video controls playsinline preload="metadata" class="hidden w-full max-h-[75vh] bg-black object-contain">
@@ -131,7 +129,6 @@ const filters = [...new Set(artworks.flatMap((art) => art.tags))];
   const root = document.querySelector<HTMLElement>('[data-fanart-gallery]');
   if (root) {
     const cards = [...root.querySelectorAll<HTMLButtonElement>('[data-fanart-card]')];
-    const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-fanart-filter]')];
     const dialog = root.querySelector<HTMLDialogElement>('[data-fanart-dialog]');
     const image = root.querySelector<HTMLImageElement>('[data-fanart-image]');
     const video = root.querySelector<HTMLVideoElement>('[data-fanart-video]');
@@ -141,26 +138,11 @@ const filters = [...new Set(artworks.flatMap((art) => art.tags))];
     const source = root.querySelector<HTMLAnchorElement>('[data-fanart-source]');
     const tags = root.querySelector<HTMLElement>('[data-fanart-tags]');
     let selected = 0;
-    const visibleCards = () => cards.filter((card) => !card.classList.contains('!hidden'));
-
-    filters.forEach((button) => button.addEventListener('click', () => {
-      const filter = button.dataset.fanartFilter || '';
-      cards.forEach((card) => card.classList.toggle('!hidden', Boolean(filter) && !card.dataset.filterTags?.split('|').includes(filter)));
-      filters.forEach((item) => {
-        const active = item === button;
-        item.setAttribute('aria-pressed', String(active));
-        item.classList.toggle('bg-[#EE3F87]', active);
-        item.classList.toggle('text-white', active);
-        item.classList.toggle('bg-white', !active);
-        item.classList.toggle('text-[#EE3F87]', !active);
-      });
-    }));
 
     const open = (index: number) => {
       if (!dialog || !image || !video || !videoSource || !title || !artist || !source || !tags) return;
-      const available = visibleCards();
-      selected = (index + available.length) % available.length;
-      const card = available[selected];
+      selected = (index + cards.length) % cards.length;
+      const card = cards[selected];
       const preview = card.querySelector('img');
       const previewSrc = preview?.currentSrc || preview?.src || '';
 
@@ -186,7 +168,7 @@ const filters = [...new Set(artworks.flatMap((art) => art.tags))];
       if (!dialog.open) dialog.showModal();
     };
 
-    cards.forEach((card) => card.addEventListener('click', () => open(visibleCards().indexOf(card))));
+    cards.forEach((card, index) => card.addEventListener('click', () => open(index)));
     root.querySelector('[data-fanart-close]')?.addEventListener('click', () => dialog?.close());
     root.querySelector('[data-fanart-prev]')?.addEventListener('click', () => open(selected - 1));
     root.querySelector('[data-fanart-next]')?.addEventListener('click', () => open(selected + 1));
