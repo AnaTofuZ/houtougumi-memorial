@@ -12,12 +12,13 @@ interface Props {
 
 const {
   title,
-  description = 'ほうとう組（宝灯桃汁・ボス・司令官）の非公式ファンサイトです。',
+  description = 'このサイトは2026年4月に引退した山梨ご当地VTuber宝灯桃汁をはじめとするVTuberプロジェクト「ほうとう組。」の非公式ファンサイトです。',
   ogImage = '/favicon.svg',
   noindex = false,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ほうとう組ファンサイト` : 'ほうとう組ファンサイト';
+const siteName = 'ほうとう組。非公式ファンサイト';
+const fullTitle = title ? `${title} | ${siteName}` : siteName;
 const canonicalPath = Astro.url.pathname === '/' ? '/' : `${Astro.url.pathname.replace(/\/$/, '')}/`;
 const canonicalUrl = new URL(canonicalPath, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
@@ -35,6 +36,7 @@ const allowIndex = import.meta.env.SITE_READY === 'true' && !noindex;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:locale" content="ja_JP" />

@@ -14,7 +14,7 @@ export const fanarts: FanArt[] = [
   {
     id: '1',
     src: '/images/kari.png',
-    alt: 'ほうとう組 ファンアート 1',
+    alt: 'ほうとう組。ファンアート 1',
     artist: '（作者名）',
     tags: ['3人'],
     members: ['momojiru', 'boss', 'shirei'],
@@ -22,7 +22,7 @@ export const fanarts: FanArt[] = [
   {
     id: '2',
     src: '/images/kari.png',
-    alt: 'ほうとう組 ファンアート 2',
+    alt: 'ほうとう組。ファンアート 2',
     artist: '（作者名）',
     tags: ['宝灯桃汁'],
     members: ['momojiru'],
@@ -30,7 +30,7 @@ export const fanarts: FanArt[] = [
   {
     id: '3',
     src: '/images/kari.png',
-    alt: 'ほうとう組 ファンアート 3',
+    alt: 'ほうとう組。ファンアート 3',
     artist: '（作者名）',
     tags: ['ボス'],
     members: ['boss'],
@@ -38,7 +38,7 @@ export const fanarts: FanArt[] = [
   {
     id: '4',
     src: '/images/kari.png',
-    alt: 'ほうとう組 ファンアート 4',
+    alt: 'ほうとう組。ファンアート 4',
     artist: '（作者名）',
     tags: ['司令官'],
     members: ['shirei'],
@@ -46,7 +46,7 @@ export const fanarts: FanArt[] = [
   {
     id: '5',
     src: '/images/kari.png',
-    alt: 'ほうとう組 ファンアート 5',
+    alt: 'ほうとう組。ファンアート 5',
     artist: '（作者名）',
     tags: ['3人'],
     members: ['momojiru', 'boss', 'shirei'],
@@ -54,7 +54,7 @@ export const fanarts: FanArt[] = [
   {
     id: '6',
     src: '/images/kari.png',
-    alt: 'ほうとう組 ファンアート 6',
+    alt: 'ほうとう組。ファンアート 6',
     artist: '（作者名）',
     tags: ['宝灯桃汁', 'ボス'],
     members: ['momojiru', 'boss'],
