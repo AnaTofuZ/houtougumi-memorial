@@ -18,6 +18,11 @@ pnpm-debug.log*
 .env.production
 .wrangler/
 
+# downloaded media is stored in R2
+src/assets/images/fanart/
+public/media/fanart/
+public/media/fanart-patrol/
+
 # macOS-specific files
 .DS_Store
 

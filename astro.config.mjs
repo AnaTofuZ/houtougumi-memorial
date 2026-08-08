@@ -8,6 +8,13 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://houtougumi-memorial.anatofuz.net',
+  image: {
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'assets.houtougumi-memorial.anatofuz.net',
+      pathname: '/fanart/images/**',
+    }],
+  },
   fonts: [
     {
       provider: fontProviders.google(),
