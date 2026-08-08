@@ -35,11 +35,11 @@ npm run build
 
 ### ファンアート・クソコラ
 
-- `#桃汁クソコラグランプリ`は123投稿、媒体136件。画像・動画をR2へ配置済み。
+- `#桃汁クソコラグランプリ`の画像・動画はR2へ配置済み。除外後の掲載媒体は135件。
 - タグなしの`AnaTofuZ/status/1659520201032105985`はクソコラとして追加済み。
 - `romadeco_0A0/status/2037849175753400370`は通常ファンアートとして追加し、`桃汁ぱとろーる`タグに分類済み。
-- 統合データは393投稿、URL重複除外後475作品（`桃汁ぱとろーる`339、クソコラ136）。
-- 全作品は24件ずつ20ページ、タグ別は`桃汁ぱとろーる`15ページ、クソコラ6ページへ静的分割。一括ロードしない。
+- 統合データは除外後411投稿、URL重複除外後502作品（`桃汁ぱとろーる`367、クソコラ135）。
+- 全作品は24件ずつ21ページ、タグ別は`桃汁ぱとろーる`16ページ、クソコラ6ページへ静的分割。一括ロードしない。
 - `桃汁パトロール`は`桃汁ぱとろーる`へ正規化する。
 - カード画像はAstro `Image`で800px WebPへ変換。ダイアログの素の`img`は、クリックしたカードの最適化済み`/_astro/*.webp` URLを再利用するための表示器で、R2元画像を直接配信しない。
 
@@ -55,7 +55,7 @@ npm audit --omit=dev
 ```
 
 - ローカルブラウザでコメント・ファンアート各24件、前後ページ、タグ別ページ、作品ダイアログ、コンソールエラーなしを確認済み。
-- `scripts/check-generated-pages.mjs`はコメント12ページ、全ファンアート20ページ、タグ別15/6ページと各ページ最大24件を検証する。
+- `scripts/check-generated-pages.mjs`はコメント12ページ、全ファンアート21ページ、タグ別16/6ページと各ページ最大24件を検証する。
 
 ## 完了した変更
 
@@ -70,6 +70,12 @@ npm audit --omit=dev
   - 元投稿に媒体がなく、リプライ側だけに画像・動画があるケースも回収。
   - 269投稿、媒体レコード347件（画像336件、動画11件）。ギャラリー側ではURL重複を除外する。
   - CIとCloudflare Workers Buildsは成功し、2026-08-08にマージ済み。
+- [PR #15: @natao1212のファンアートを追加](https://github.com/AnaTofuZ/houtougumi-memorial/pull/15)
+  - 選定した投稿を統合し、媒体をR2へ配置。
+  - ダイアログでは画像全体が欠けないAstro最適化画像を表示する。
+- [PR #16: ローカルのファンアート除外レビュー画面を追加](https://github.com/AnaTofuZ/houtougumi-memorial/pull/16)
+  - 投稿単位と画像・動画単位の除外選択に対応。
+  - 23投稿と9媒体を除外リストへ反映済み。
 
 ## ファンアートのデータ構成
 
@@ -77,9 +83,13 @@ npm audit --omit=dev
 - `data/fanart-twitter-patrol-export.json`: `#桃汁パトロール`の投稿データ。
 - `data/fanart-media.json`: ひらがなタグの媒体取得結果。
 - `data/fanart-patrol-media.json`: カタカナタグとリプライの媒体取得結果。
+- `data/fanart-natao-media.json`: `@natao1212`から選定した投稿の媒体取得結果。
 - `data/fanart-twitter-hiragana-reply-media.json`: ひらがなタグのリプライ再確認結果を分離保存した監査用データ。統合スクリプトの直接入力ではない。
+- `data/x/fanart-excluded-ids.json`: 非掲載にする投稿IDと媒体ファイル名。`posts`は投稿全体、`media`は画像・動画単体を除外する。
 - `data/fanart-twitter-merged.json`: サイトが実際に読む統合済みデータ。投稿日時の新しい順。
-- `scripts/merge-fanart-data.mjs`: 2種類の媒体取得結果を統合し、媒体URLをR2の公開URLへ変換する。
+- `scripts/merge-fanart-data.mjs`: 媒体取得結果を統合し、除外リストを適用して媒体URLをR2の公開URLへ変換する。
+- `tools/fanart-review/index.html`: 掲載データから除外対象を選ぶローカル管理画面。
+- `scripts/serve-fanart-review.mjs`: 管理画面と掲載データを`127.0.0.1`だけで配信するNode.jsサーバー。
 - `src/data/fanart.ts`: 統合JSONを表示用の型へ変換し、媒体URLの重複を除外する。
 - `src/components/FanArtGallery.astro`: Astroのみで実装したギャラリーとダイアログ。デザインは既存版を維持。
 
@@ -91,6 +101,8 @@ node scripts/upload-assets-r2.mjs
 npm run check
 npm run build
 ```
+
+掲載内容を見直す場合は、`npm run review:fanart`を実行して <http://127.0.0.1:4175> を開く。投稿全体は`ツイートID`、媒体単体は`ツイートID#ファイル名`としてコピーされる。確定後、前者を除外JSONの`posts`、後者の`#`以降を`media`へ追加して統合JSONを再生成する。選択状態はブラウザの`localStorage`に保存される。
 
 ダウンロード先の`src/assets/images/fanart/`と`public/media/fanart/`は`.gitignore`対象。媒体そのものはGitへコミットしない。JSONとスクリプトだけを管理する。
 

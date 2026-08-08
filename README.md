@@ -23,6 +23,20 @@ npm audit --omit=dev
 
 生成HTMLへ残る `<!-- ... -->` コメントは、公開上の意図がある場合だけ使用します。実装上のメモはフロントマターやTypeScript内のコメントに置きます。
 
+## ファンアート除外レビュー
+
+掲載済みファンアートをローカルで確認する場合は、次を実行して <http://127.0.0.1:4175> を開きます。
+
+```sh
+npm run review:fanart
+```
+
+投稿全体または画像・動画単体を選択し、コピーしたIDをCodexへ渡します。投稿は `ツイートID`、媒体単体は `ツイートID#ファイル名` 形式です。確定した除外対象は `data/x/fanart-excluded-ids.json` に記録し、次のコマンドでサイト用データを再生成します。
+
+```sh
+node scripts/merge-fanart-data.mjs
+```
+
 ## Cloudflare Workers
 
 公開先: <https://houtougumi-memorial.anatofuz.net/>
