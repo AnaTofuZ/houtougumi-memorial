@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://houtougumi-memorial.anatofuz.net',
   integrations: [react()],
 
   vite: {

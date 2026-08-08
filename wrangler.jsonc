@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "houtougumi-memorial",
+  "compatibility_date": "2026-08-08",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    {
+      "pattern": "houtougumi-memorial.anatofuz.net",
+      "custom_domain": true
+    }
+  ]
+}

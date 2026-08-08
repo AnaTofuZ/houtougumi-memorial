@@ -43,8 +43,8 @@
 
 ### SEO・共有表示
 
-- [ ] 本番ドメインを決定する
-- [ ] `astro.config.mjs` に `site` を設定する
+- [x] 本番ドメインを `houtougumi-memorial.anatofuz.net` に決定する
+- [x] `astro.config.mjs` に `site` を設定する
 - [ ] canonical URLを追加する
 - [ ] `og:url` と `og:image` を追加する
 - [ ] Twitter Cardを追加する
@@ -76,14 +76,14 @@
 
 静的サイトとしてCloudflare Workers Static Assetsへ配置する方針を第一候補とする。現状はSSRを必要としないため、Cloudflare Astroアダプターは追加しない。
 
-- [ ] Wranglerを開発依存関係へ追加する
-- [ ] `wrangler.jsonc` を追加する
-- [ ] `assets.directory` に `./dist` を設定する
-- [ ] `not_found_handling` に `404-page` を設定する
-- [ ] ビルド・プレビュー・デプロイスクリプトを追加する
+- [x] Wranglerを開発依存関係へ追加する
+- [x] `wrangler.jsonc` を追加する
+- [x] `assets.directory` に `./dist` を設定する
+- [x] `not_found_handling` に `404-page` を設定する
+- [x] ビルド・プレビュー・デプロイスクリプトを追加する
 - [ ] Git連携とプレビューデプロイを設定する
 - [ ] 独自ドメインとHTTPSを設定する
-- [ ] `workers.dev` と独自ドメインの重複公開を避け、正規ドメインへ統一する
+- [x] `workers.dev` と独自ドメインの重複公開を避け、正規ドメインへ統一する
 - [ ] Cloudflare上で404ページと末尾スラッシュの挙動を確認する
 
 Cloudflare Pagesを使用する場合の基本設定:
