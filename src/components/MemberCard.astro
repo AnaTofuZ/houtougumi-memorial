@@ -7,7 +7,7 @@ interface Props {
 
 const { member } = Astro.props;
 const { id, name, tagline, color, colorLight, colorDark, illustrations } = member;
-const coverImage = illustrations[0]?.src;
+const coverImage = illustrations[0];
 ---
 
 <a
@@ -26,8 +26,10 @@ const coverImage = illustrations[0]?.src;
     {
       coverImage ? (
         <img
-          src={coverImage}
+          src={coverImage.src}
           alt={`${name} イラスト`}
+          width={coverImage.width}
+          height={coverImage.height}
           loading="lazy"
           decoding="async"
           class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"

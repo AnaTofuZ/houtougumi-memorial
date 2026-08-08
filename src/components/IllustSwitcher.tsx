@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 interface Illustration {
   src: string;
+  width: number;
+  height: number;
   alt: string;
 }
 
@@ -48,6 +50,8 @@ export default function IllustSwitcher({
               key={current}
               src={illustrations[current].src}
               alt={illustrations[current].alt}
+              width={illustrations[current].width}
+              height={illustrations[current].height}
               className="w-full h-full object-cover object-top"
               style={{
                 opacity: fading ? 0 : 1,
@@ -131,6 +135,8 @@ export default function IllustSwitcher({
               <img
                 src={illust.src}
                 alt={illust.alt}
+                width={illust.width}
+                height={illust.height}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover object-top"

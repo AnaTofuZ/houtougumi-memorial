@@ -1,7 +1,19 @@
+import { getImage } from 'astro:assets';
+import kari from '../assets/images/kari.png';
+
 export interface Illustration {
   src: string;
+  width: number;
+  height: number;
   alt: string;
 }
+
+const placeholder = await getImage({ src: kari, width: 640, format: 'webp' });
+const placeholderImage = {
+  src: placeholder.src,
+  width: Number(placeholder.attributes.width),
+  height: Number(placeholder.attributes.height),
+};
 
 export interface Archive {
   title: string;
@@ -37,9 +49,9 @@ export const members: MemberProfile[] = [
     profile:
       'これはダミーのプロフィール文です。\n宝灯桃汁についての説明文が入ります。',
     illustrations: [
-      { src: '/images/kari.png', alt: '宝灯桃汁 立ち絵 1（仮）' },
-      { src: '/images/kari.png', alt: '宝灯桃汁 立ち絵 2（仮）' },
-      { src: '/images/kari.png', alt: '宝灯桃汁 立ち絵 3（仮）' },
+      { ...placeholderImage, alt: '宝灯桃汁 立ち絵 1（仮）' },
+      { ...placeholderImage, alt: '宝灯桃汁 立ち絵 2（仮）' },
+      { ...placeholderImage, alt: '宝灯桃汁 立ち絵 3（仮）' },
     ],
     episodes: [
       {
@@ -76,9 +88,9 @@ export const members: MemberProfile[] = [
     profile:
       'これはダミーのプロフィール文です。\nボスについての説明文が入ります。',
     illustrations: [
-      { src: '/images/kari.png', alt: 'ボス 立ち絵 1（仮）' },
-      { src: '/images/kari.png', alt: 'ボス 立ち絵 2（仮）' },
-      { src: '/images/kari.png', alt: 'ボス 立ち絵 3（仮）' },
+      { ...placeholderImage, alt: 'ボス 立ち絵 1（仮）' },
+      { ...placeholderImage, alt: 'ボス 立ち絵 2（仮）' },
+      { ...placeholderImage, alt: 'ボス 立ち絵 3（仮）' },
     ],
     episodes: [
       {
@@ -115,9 +127,9 @@ export const members: MemberProfile[] = [
     profile:
       'これはダミーのプロフィール文です。\n司令官についての説明文が入ります。',
     illustrations: [
-      { src: '/images/kari.png', alt: '司令官 立ち絵 1（仮）' },
-      { src: '/images/kari.png', alt: '司令官 立ち絵 2（仮）' },
-      { src: '/images/kari.png', alt: '司令官 立ち絵 3（仮）' },
+      { ...placeholderImage, alt: '司令官 立ち絵 1（仮）' },
+      { ...placeholderImage, alt: '司令官 立ち絵 2（仮）' },
+      { ...placeholderImage, alt: '司令官 立ち絵 3（仮）' },
     ],
     episodes: [
       {

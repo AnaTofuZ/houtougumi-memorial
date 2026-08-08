@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 interface FanArt {
   id: string;
   src: string;
+  width: number;
+  height: number;
   alt: string;
   artist: string;
   artistLink?: string;
@@ -55,7 +57,10 @@ export default function FanArtGallery({ artworks }: Props) {
             <img
               src={art.src}
               alt={art.alt}
-              loading="lazy"
+              width={art.width}
+              height={art.height}
+              loading={idx === 0 ? 'eager' : 'lazy'}
+              fetchPriority={idx === 0 ? 'high' : 'auto'}
               decoding="async"
               className="w-full h-auto block group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
@@ -132,6 +137,8 @@ export default function FanArtGallery({ artworks }: Props) {
             <img
               src={selected.src}
               alt={selected.alt}
+              width={selected.width}
+              height={selected.height}
               decoding="async"
               className="w-full max-h-[75vh] object-contain block"
             />
