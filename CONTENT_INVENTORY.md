@@ -25,7 +25,7 @@
 | 司令官 | 英語名、紹介文、エピソード、アーカイブ、語録 | `src/data/members.ts` |  | 未着手 |
 | 楽曲 | 曲名、参加者、説明、公開日、YouTube URL、タグ | `src/data/music.ts` |  | 未着手 |
 | 年表 | 日付、分類、見出し、説明、関連URL | `src/data/timeline.ts` |  | 未着手 |
-| グッズ | 商品名、説明、価格、販売状態、購入URL | `data/stores/houtoumomojiru.json`、`src/data/goods.ts` |  | 確認中 |
+| グッズ | 商品名、説明、価格、販売状態、購入URL | `data/stores/houtoumomojiru.json`、`src/components/GoodsCatalog.astro` |  | 反映済 |
 | ファンコメント | 表示名、本文、投稿日、媒体 | `src/data/comments.ts` |  | 未着手 |
 | ファンアート | 作者名、作者URL、説明、タグ、対象メンバー | `src/data/fanart.ts` |  | 未着手 |
 | 各ページ説明 | 音楽、グッズ、コメント、ファンアートの導入文 | `src/pages/*.astro` |  | 未着手 |
@@ -40,7 +40,7 @@
 | メンバー立ち絵 | 各1〜3点 | `src/assets/images/members/` |  |  | 未着手 |
 | トップ装飾画像 | 必要数 | `src/assets/images/members/` |  |  | 未着手 |
 | 楽曲サムネイル | 各曲1点 | `src/assets/images/music/` |  |  | 未着手 |
-| グッズ画像 | 各商品1点 | `src/assets/images/goods/` |  |  | 未着手 |
+| グッズ画像 | 各商品1点 | `src/assets/images/goods/stores/` | MOMOJIRU's STORE | STORES商品ページ | 反映済 |
 | ファンアート | 各作品1点 | `src/assets/images/fanart/` |  |  | 未着手 |
 | OGP画像 | 1200×630 PNGまたはJPEG | `public/` |  |  | 未着手 |
 | favicon | SVGとICO | `public/` |  |  | 未着手 |

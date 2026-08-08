@@ -1,13 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import catalog from '../../data/stores/houtoumomojiru.json';
 
 const products = catalog.products;
 const categories = [...new Set(products.flatMap((product) => product.categories.map((category) => category.name)))].sort();
-const collectedAt = new Intl.DateTimeFormat('ja-JP', {
-  dateStyle: 'long',
-  timeStyle: 'short',
-  timeZone: 'Asia/Tokyo',
-}).format(new Date(catalog.source.collectedAt));
+const imageModules = import.meta.glob<{ default: ImageMetadata }>('../assets/images/goods/stores/*.{jpg,jpeg,png,webp}', { eager: true });
+const productImages = new Map(Object.entries(imageModules).map(([path, module]) => [path.split('/').pop()?.split('.')[0], module.default]));
+const missingImages = products.filter((product) => !productImages.has(product.id));
+if (missingImages.length) throw new Error(`グッズ画像がありません: ${missingImages.map((product) => product.id).join(', ')}`);
 
 const statusLabel: Record<string, string> = {
   available: '販売中',
@@ -49,9 +49,8 @@ const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}�
       </label>
     </div>
 
-    <div class="mb-5 flex flex-wrap items-center justify-between gap-2 text-sm text-[#595959]">
+    <div class="mb-5 text-sm text-[#595959]">
       <p id="goods-count" aria-live="polite">{products.length}件を表示</p>
-      <p>取得日時：{collectedAt}</p>
     </div>
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="goods-grid">
@@ -59,6 +58,7 @@ const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}�
         const productCategories = product.categories.map((category) => category.name);
         const categoryValue = productCategories.length ? productCategories.join('|') : '未分類';
         const searchValue = `${product.name} ${product.description} ${productCategories.join(' ')}`.toLocaleLowerCase('ja');
+        const image = productImages.get(product.id)!;
 
         return (
           <article
@@ -69,9 +69,14 @@ const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}�
             data-search={searchValue}
           >
             <div class="aspect-square overflow-hidden bg-[#DDF0FF]">
-              <img
-                src={product.images.primaryUrl}
+              <Image
+                src={image}
                 alt={product.name}
+                layout="constrained"
+                widths={[320, 460, 640]}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                format="webp"
+                fit="contain"
                 loading="lazy"
                 decoding="async"
                 class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
