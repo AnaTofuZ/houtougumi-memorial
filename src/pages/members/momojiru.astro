@@ -34,7 +34,7 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
         <div>
           <div class="mb-6">
             <p class="tag mb-3 inline-block text-white" style={`background-color: ${color}`}>MEMBER</p>
-            <h1 class="text-4xl font-[--font-heading] font-extrabold mb-2" style={`color: ${colorDark}`}>
+            <h1 class="text-4xl font-(family-name:--font-heading) font-extrabold mb-2" style={`color: ${colorDark}`}>
               {name}
             </h1>
             <p class="text-base text-[#444444] leading-[1.75]">{tagline}</p>
@@ -120,7 +120,7 @@ const { name, color, colorLight, colorDark, tagline, profile, illustrations, epi
             style={`background-color: ${colorLight}; border-color: ${color}`}
           >
             <span class="absolute left-3 top-3 text-2xl leading-none opacity-30" style={`color: ${colorDark}`}>&ldquo;</span>
-            <p class="text-base font-bold font-[--font-heading]" style={`color: ${colorDark}`}>{quote}</p>
+            <p class="text-base font-bold font-(family-name:--font-heading)" style={`color: ${colorDark}`}>{quote}</p>
           </div>
         ))}
       </div>
