@@ -29,6 +29,8 @@ const coverImage = illustrations[0]?.src;
         <img
           src={coverImage}
           alt={`${name} イラスト`}
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
           onerror="this.style.display='none'"
         />

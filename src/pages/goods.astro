@@ -25,10 +25,14 @@ const statusStyle: Record<string, string> = {
   <section class="pb-8" data-scroll-bg="#EAF6FF">
     <div class="container mx-auto px-4 md:px-6">
       <div class="flex justify-center gap-2 flex-wrap">
-        {['すべて', '販売中', '近日公開', '販売終了'].map((status) => (
+        {['すべて', '販売中', '近日公開', '販売終了'].map((status, index) => (
           <button
             data-filter={status}
-            class="filter-btn px-5 py-2 rounded-full text-sm font-bold border-2 border-[#40ACFA] text-[#1D86D9] hover:bg-[#1D86D9] hover:text-white hover:border-[#1D86D9] transition-colors"
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            class:list={[
+              'filter-btn px-5 py-2 rounded-full text-sm font-bold border-2 hover:bg-[#1D86D9] hover:text-white hover:border-[#1D86D9] transition-colors',
+              index === 0 ? 'bg-[#1D86D9] text-white border-[#1D86D9]' : 'border-[#40ACFA] text-[#1D86D9]',
+            ]}
           >
             {status}
           </button>
@@ -49,6 +53,8 @@ const statusStyle: Record<string, string> = {
                 <img
                   src={item.image}
                   alt={item.name}
+                  loading="lazy"
+                  decoding="async"
                   class="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
                   onerror="this.style.display='none'"
                 />
@@ -96,6 +102,7 @@ const statusStyle: Record<string, string> = {
       const filter = btn.dataset.filter ?? 'すべて';
 
       buttons.forEach((b) => {
+        b.setAttribute('aria-pressed', String(b === btn));
         b.classList.remove('bg-[#1D86D9]', 'text-white', 'border-[#1D86D9]');
         b.classList.add('border-[#40ACFA]', 'text-[#1D86D9]');
       });
@@ -104,9 +111,9 @@ const statusStyle: Record<string, string> = {
 
       cards.forEach((card) => {
         if (filter === 'すべて' || card.dataset.status === filter) {
-          card.style.display = '';
+          card.hidden = false;
         } else {
-          card.style.display = 'none';
+          card.hidden = true;
         }
       });
     });

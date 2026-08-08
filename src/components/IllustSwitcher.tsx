@@ -126,10 +126,13 @@ export default function IllustSwitcher({
                 background: `${themeLightColor}`,
               }}
               aria-label={`${name} イラスト ${idx + 1}`}
+              aria-pressed={idx === current}
             >
               <img
                 src={illust.src}
                 alt={illust.alt}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover object-top"
                 onError={(e) => {
                   const target = e.currentTarget as HTMLImageElement;

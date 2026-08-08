@@ -85,6 +85,11 @@
     background-color: var(--color-primary-soft);
     color: var(--color-primary-dark);
   }
+
+  :focus-visible {
+    outline: 3px solid var(--color-secondary-dark);
+    outline-offset: 3px;
+  }
 }
 
 @layer components {

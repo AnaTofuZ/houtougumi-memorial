@@ -1,46 +1,37 @@
-# Astro Starter Kit: Basics
+# ほうとう組メモリアルサイト
+
+Astroで構築した、山梨県のご当地VTuber「宝灯桃汁」とほうとう組の非公式ファンサイトです。
+
+現在はダミーコンテンツを含む準備中サイトです。通常のビルドでは検索エンジンのインデックスを拒否します。
+
+## 開発
 
 ```sh
-npm create astro@latest -- --template basics
+npm ci
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+公開前の機械的チェック:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```sh
+npm run check
+npm run build
+npm audit --omit=dev
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Cloudflare Workers
 
-## 🧞 Commands
+公開先: <https://houtougumi-memorial.anatofuz.net/>
 
-All commands are run from the root of the project, from a terminal:
+```sh
+npm run preview:cloudflare
+npm run deploy
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+正式リリース時だけ `SITE_READY=true` を付けてビルドします。これによりページと `robots.txt` のインデックス許可が有効になります。
 
-## 👀 Want to learn more?
+```sh
+SITE_READY=true npm run deploy
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+リリース判断の詳細は [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md) を参照してください。
