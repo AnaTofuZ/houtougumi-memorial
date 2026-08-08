@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets';
+import catalog from '../../data/stores/houtoumomojiru.json';
+
+const products = catalog.products;
+const categories = [...new Set(products.flatMap((product) => product.categories.map((category) => category.name)))].sort();
+const imageModules = import.meta.glob<{ default: ImageMetadata }>('../assets/images/goods/stores/*.{jpg,jpeg,png,webp}', { eager: true });
+const productImages = new Map(Object.entries(imageModules).map(([path, module]) => [path.split('/').pop()?.split('.')[0], module.default]));
+const missingImages = products.filter((product) => !productImages.has(product.id));
+if (missingImages.length) throw new Error(`グッズ画像がありません: ${missingImages.map((product) => product.id).join(', ')}`);
+
+const statusLabel: Record<string, string> = {
+  available: '販売中',
+  sold_out: '販売終了',
+  unknown: '状態不明',
+};
+
+const statusStyle: Record<string, string> = {
+  available: 'background: #D1FAE5; color: #065F46',
+  sold_out: 'background: #F3F4F6; color: #6B7280',
+  unknown: 'background: #FEF3C7; color: #92400E',
+};
+
+const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}…` : text;
+---
+
+<section class="pb-24" data-scroll-bg="#EAF6FF">
+  <div class="container mx-auto px-4 md:px-8">
+    <div class="card mb-8 grid gap-4 md:grid-cols-[1fr_auto_auto] md:items-end">
+      <label class="grid gap-2 text-sm font-bold text-[#1D86D9]">
+        商品名・説明を検索
+        <input id="goods-search" type="search" placeholder="例：アクリルスタンド" class="rounded-xl border border-[#A7D9FF] bg-white px-4 py-2 text-base font-normal text-[#35263A]" />
+      </label>
+      <label class="grid gap-2 text-sm font-bold text-[#1D86D9]">
+        販売状態
+        <select id="goods-status" class="rounded-xl border border-[#A7D9FF] bg-white px-4 py-2 text-base font-normal text-[#35263A]">
+          <option value="">すべて</option>
+          <option value="available">販売中</option>
+          <option value="sold_out">販売終了</option>
+        </select>
+      </label>
+      <label class="grid gap-2 text-sm font-bold text-[#1D86D9]">
+        カテゴリ
+        <select id="goods-category" class="rounded-xl border border-[#A7D9FF] bg-white px-4 py-2 text-base font-normal text-[#35263A]">
+          <option value="">すべて</option>
+          {categories.map((category) => <option value={category}>{category}</option>)}
+          <option value="未分類">未分類</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="mb-5 text-sm text-[#595959]">
+      <p id="goods-count" aria-live="polite">{products.length}件を表示</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="goods-grid">
+      {products.map((product) => {
+        const productCategories = product.categories.map((category) => category.name);
+        const categoryValue = productCategories.length ? productCategories.join('|') : '未分類';
+        const searchValue = `${product.name} ${product.description} ${productCategories.join(' ')}`.toLocaleLowerCase('ja');
+        const image = productImages.get(product.id)!;
+
+        return (
+          <article
+            class="card group flex flex-col overflow-hidden p-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            data-product
+            data-status={product.availability}
+            data-category={categoryValue}
+            data-search={searchValue}
+          >
+            <div class="aspect-square overflow-hidden bg-[#DDF0FF]">
+              <Image
+                src={image}
+                alt={product.name}
+                layout="constrained"
+                widths={[320, 460, 640]}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                format="webp"
+                fit="contain"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+
+            <div class="flex flex-1 flex-col p-5">
+              <div class="mb-3 flex items-start justify-between gap-2">
+                <h2 class="text-base font-bold leading-snug">{product.name}</h2>
+                <span class="tag flex-shrink-0 text-xs" style={statusStyle[product.availability]}>
+                  {statusLabel[product.availability]}
+                </span>
+              </div>
+
+              <div class="mb-3 flex flex-wrap gap-1">
+                {(productCategories.length ? productCategories : ['未分類']).map((category) => (
+                  <span class="rounded-full bg-[#EAF6FF] px-2 py-1 text-xs font-bold text-[#1D86D9]">{category}</span>
+                ))}
+                {product.isDigitalDownload && <span class="rounded-full bg-[#D8FBF3] px-2 py-1 text-xs font-bold text-[#159E85]">ダウンロード</span>}
+              </div>
+
+              <p class="mb-4 whitespace-pre-line text-sm leading-relaxed text-[#595959]">{summarize(product.description)}</p>
+
+              <div class="mt-auto flex items-center justify-between gap-3 border-t border-[#DDF0FF] pt-4">
+                <span class="font-bold text-[#1D86D9]">{product.price.display}</span>
+                <a href={product.url} target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-[#1D86D9] underline underline-offset-4 hover:text-[#166bb0]">
+                  STORESで見る ↗
+                </a>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>('#goods-search');
+  const status = document.querySelector<HTMLSelectElement>('#goods-status');
+  const category = document.querySelector<HTMLSelectElement>('#goods-category');
+  const count = document.querySelector<HTMLElement>('#goods-count');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-product]')];
+
+  const filter = () => {
+    const query = search?.value.trim().toLocaleLowerCase('ja') ?? '';
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const matches = (!query || card.dataset.search?.includes(query))
+        && (!status?.value || card.dataset.status === status.value)
+        && (!category?.value || card.dataset.category?.split('|').includes(category.value));
+      card.hidden = !matches;
+      if (matches) visible += 1;
+    });
+
+    if (count) count.textContent = `${visible}件を表示`;
+  };
+
+  search?.addEventListener('input', filter);
+  status?.addEventListener('change', filter);
+  category?.addEventListener('change', filter);
+</script>

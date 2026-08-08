@@ -15,7 +15,6 @@ const members = [
 
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#FFD3E8] shadow-sm">
   <nav class="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-    <!-- Logo -->
     <a
       href="/"
       class="font-[--font-heading] text-base font-bold text-[#EE3F87] hover:opacity-80 transition-opacity flex items-center gap-2"
@@ -26,11 +25,9 @@ const members = [
       </span>
     </a>
 
-    <!-- Desktop nav -->
     <div class="hidden md:flex items-center gap-5 text-sm font-medium">
       <a href="/" class="hover:text-[#EE3F87] transition-colors">トップ</a>
 
-      <!-- Members dropdown -->
       <div class="relative group">
         <button
           class="hover:text-[#EE3F87] transition-colors flex items-center gap-1 cursor-pointer"
@@ -66,7 +63,6 @@ const members = [
       {navLinks.map((link) => <a href={link.href} class="hover:text-[#EE3F87] transition-colors">{link.label}</a>)}
     </div>
 
-    <!-- Mobile hamburger -->
     <button
       id="mobile-menu-btn"
       class="md:hidden p-2 rounded-xl hover:bg-[#FFE9F3] transition-colors"
@@ -80,7 +76,6 @@ const members = [
     </button>
   </nav>
 
-  <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden border-t border-[#FFD3E8] bg-white">
     <div class="container mx-auto px-4 py-3 space-y-1">
       <a href="/" class="block py-2 px-3 rounded-xl text-sm font-medium hover:bg-[#FFE9F3] transition-colors"
