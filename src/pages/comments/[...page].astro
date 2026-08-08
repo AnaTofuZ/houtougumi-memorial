@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { fanComments } from '../../data/comments';
+
+export function getStaticPaths() {
+  const pages = Math.ceil(fanComments.length / 24);
+  return Array.from({ length: pages }, (_, index) => ({
+    params: { page: index ? String(index + 1) : undefined },
+    props: { page: index + 1 },
+  }));
+}
+
+const { page } = Astro.props;
+
+const cardBgs = [
+  '#FFE4EC',
+  '#DDF0FF',
+  '#D8FBF3',
+  '#FFE4EC',
+  '#D8FBF3',
+  '#DDF0FF',
+];
+const pageSize = 24;
+const pageCount = Math.ceil(fanComments.length / pageSize);
+const pageComments = fanComments.slice((page - 1) * pageSize, page * pageSize);
+const pageHref = (target: number) => target === 1 ? '/comments/' : `/comments/${target}/`;
+---
+
+<BaseLayout title="コメント集" description="「ほうとう組。」へのファンコメント集です。">
+  <section class="pt-16 pb-10" data-scroll-bg="#EAF6FF">
+    <div class="container mx-auto px-4 md:px-6 text-center">
+      <p class="tag text-white mb-4 inline-block bg-[#1D86D9] font-bold">COMMENTS</p>
+      <h1 class="text-4xl md:text-5xl font-(family-name:--font-heading) font-extrabold mb-3 text-[#166bb0]">
+        ファンの声
+      </h1>
+      <p class="text-base text-[#595959]">「#ありがとナスほうとう組」に寄せられた、感謝と思い出のメッセージです。</p>
+    </div>
+  </section>
+
+  <section class="pb-20" data-scroll-bg="#EAF6FF">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+        {
+          pageComments.map((c, idx) => (
+            <div
+              data-comment-card
+              class="rounded-2xl p-5 border border-[#CFE9FF] shadow-sm hover:shadow-md transition-shadow"
+              style={`background-color: ${cardBgs[idx % cardBgs.length]}`}
+            >
+              <p class="text-lg text-[#40ACFA] font-bold mb-2 leading-none">&ldquo;</p>
+              <p class="text-base text-[#1A1A1A] leading-[1.75] whitespace-pre-line mb-4">{c.comment}</p>
+
+              <div class="flex items-center justify-between gap-3">
+                <a href={c.sourceLink} target="_blank" rel="noopener noreferrer" class="flex min-w-0 items-center gap-2 hover:underline">
+                  <Image src={c.avatar} alt="" inferSize format="webp" loading="lazy" class="h-9 w-9 shrink-0 rounded-full object-cover" />
+                  <span class="min-w-0">
+                    <span class="block truncate text-xs font-bold text-[#444444]">{c.name}</span>
+                    <span class="block truncate text-xs text-[#595959]">{c.handle}</span>
+                  </span>
+                </a>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-[#E7F5FD] text-[#0D73B7]">{c.platform}</span>
+                  <span class="text-xs text-[#444444]">
+                    {new Date(c.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      {pageCount > 1 && (
+        <nav class="mt-8 flex items-center justify-center gap-4" aria-label="コメントのページ">
+          {page > 1 ? <a href={pageHref(page - 1)} class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] shadow-sm">前へ</a> : <span aria-disabled="true" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] opacity-40">前へ</span>}
+          <span class="text-sm font-bold text-[#444444]">{page} / {pageCount}</span>
+          {page < pageCount ? <a href={pageHref(page + 1)} class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] shadow-sm">次へ</a> : <span aria-disabled="true" class="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#166bb0] opacity-40">次へ</span>}
+        </nav>
+      )}
+    </div>
+  </section>
+</BaseLayout>

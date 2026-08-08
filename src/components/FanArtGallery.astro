@@ -4,13 +4,21 @@ import type { FanArt } from '../data/fanart';
 
 interface Props {
   artworks: FanArt[];
+  filters: string[];
+  currentTag?: string;
 }
 
-const { artworks } = Astro.props;
-const firstPreview = artworks[0].type === 'video' ? artworks[0].poster : artworks[0].image;
+const { artworks, filters, currentTag } = Astro.props;
+const filterHref = (tag?: string) => tag ? `/fanart/tag/${encodeURIComponent(tag)}/` : '/fanart/';
 ---
 
 <div data-fanart-gallery>
+  <div class="mb-6 flex flex-wrap justify-center gap-2" aria-label="タグで絞り込む">
+    <a href={filterHref()} aria-current={!currentTag ? 'page' : undefined} class:list={['rounded-full px-4 py-2 text-sm font-bold shadow-sm', !currentTag ? 'bg-[#EE3F87] text-white' : 'bg-white text-[#EE3F87]']}>すべて</a>
+    {filters.map((tag) => (
+      <a href={filterHref(tag)} aria-current={currentTag === tag ? 'page' : undefined} class:list={['rounded-full px-4 py-2 text-sm font-bold shadow-sm', currentTag === tag ? 'bg-[#EE3F87] text-white' : 'bg-white text-[#EE3F87]']}>#{tag}</a>
+    ))}
+  </div>
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     {artworks.map((art, idx) => {
       const preview = art.type === 'video' ? art.poster : art.image;
@@ -30,7 +38,8 @@ const firstPreview = artworks[0].type === 'video' ? artworks[0].poster : artwork
           <Image
             src={preview}
             alt={art.alt}
-            inferSize
+            width={800}
+            height={800}
             format="webp"
             loading={idx === 0 ? 'eager' : 'lazy'}
             priority={idx === 0}
@@ -82,12 +91,9 @@ const firstPreview = artworks[0].type === 'video' ? artworks[0].poster : artwork
       >
         ✕
       </button>
-      <Image
+      <img
         data-fanart-image
-        src={firstPreview}
         alt=""
-        inferSize
-        format="webp"
         class="w-full max-h-[75vh] object-contain block"
       />
       <video data-fanart-video controls playsinline preload="metadata" class="hidden w-full max-h-[75vh] bg-black object-contain">

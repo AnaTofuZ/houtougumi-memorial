@@ -8,6 +8,7 @@ import { timeline } from '../data/timeline';
 import { fanarts } from '../data/fanart';
 import { Image } from 'astro:assets';
 import chibi from '../assets/images/members/chibi.png';
+import { fanComments } from '../data/comments';
 ---
 
 <BaseLayout title="トップ">
@@ -123,7 +124,7 @@ import chibi from '../assets/images/members/chibi.png';
       <p class="text-center text-xs font-(family-name:--font-en) text-[#0D5FA0] tracking-widest mb-2 font-bold">VOICES</p>
       <h2 class="section-title text-2xl md:text-3xl mb-4">ファンの声</h2>
       <p class="text-center text-base text-[#595959] mb-10">
-        ※ こちらはダミーの説明文です。ファンコメントの紹介文が入ります。
+        「#ありがとナスほうとう組」に寄せられたメッセージを紹介します。
       </p>
 
       <div class="flex justify-start mb-8 pl-8 md:pl-24 opacity-60">
@@ -132,13 +133,10 @@ import chibi from '../assets/images/members/chibi.png';
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
         {
-          [
-            { comment: 'これはダミーのコメントです。ファンの声の文章がここに入ります。', handle: '@dummy_001' },
-            { comment: 'こちらもダミーのコメントです。実際のファンコメントが入ります。', handle: '@dummy_002' },
-          ].map((c) => (
+          fanComments.slice(0, 2).map((c) => (
             <div class="card">
-              <p class="text-base text-[#1A1A1A] leading-[1.75] mb-3">&ldquo;{c.comment}&rdquo;</p>
-              <p class="text-xs text-[#555555] font-medium">{c.handle}</p>
+              <p class="text-base text-[#1A1A1A] leading-[1.75] whitespace-pre-line mb-3">&ldquo;{c.comment}&rdquo;</p>
+              <a href={c.sourceLink} target="_blank" rel="noopener noreferrer" class="text-xs text-[#555555] font-medium hover:underline">{c.name}（{c.handle}）</a>
             </div>
           ))
         }

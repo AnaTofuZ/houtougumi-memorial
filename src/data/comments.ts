@@ -1,66 +1,38 @@
+import source from '../../data/x/arigato-nasu-houtougumi.json';
+import excludedIds from '../../data/x/fan-comment-excluded-ids.json';
+import sourceOverrides from '../../data/x/fan-comment-source-overrides.json';
+
 export interface FanComment {
   id: string;
+  name: string;
   handle: string;
   comment: string;
-  date?: string;
-  platform?: 'Twitter' | 'YouTube' | 'その他';
+  date: string;
+  sourceLink: string;
+  avatar: string;
+  platform: 'X';
 }
 
-export const fanComments: FanComment[] = [
-  {
-    id: '1',
-    handle: '@dummy_001',
-    comment: 'これはダミーのコメントです。ファンコメントの文章が入ります。',
-    date: '2024-04-10',
-    platform: 'Twitter',
-  },
-  {
-    id: '2',
-    handle: '@dummy_002',
-    comment: 'こちらもダミーのコメントです。実際のファンコメントが入ります。',
-    date: '2024-03-25',
-    platform: 'Twitter',
-  },
-  {
-    id: '3',
-    handle: '@dummy_003',
-    comment: 'ダミーテキストが入ります。ファンの声の文章がここに並びます。',
-    date: '2024-02-18',
-    platform: 'YouTube',
-  },
-  {
-    id: '4',
-    handle: '@dummy_004',
-    comment: 'こちらはダミーのコメントです。正式なコメントは後日更新予定です。',
-    date: '2024-01-30',
-    platform: 'Twitter',
-  },
-  {
-    id: '5',
-    handle: '@dummy_005',
-    comment: 'ダミーコメント⑤。ファンコメントの文章が入ります。',
-    date: '2024-05-12',
-    platform: 'Twitter',
-  },
-  {
-    id: '6',
-    handle: '@dummy_006',
-    comment: 'ダミーコメント⑥。実際のファンの声がここに掲載されます。',
-    date: '2024-04-28',
-    platform: 'YouTube',
-  },
-  {
-    id: '7',
-    handle: '@dummy_007',
-    comment: 'ダミーコメント⑦。ファンコメントの文章が入ります。',
-    date: '2024-05-20',
-    platform: 'Twitter',
-  },
-  {
-    id: '8',
-    handle: '@dummy_008',
-    comment: 'ダミーコメント⑧。正式なコメントは後日更新予定です。',
-    date: '2024-03-01',
-    platform: 'Twitter',
-  },
-];
+const assetRoot = 'https://assets.houtougumi-memorial.anatofuz.net/comments/avatars';
+const excluded = new Set(excludedIds);
+const overrides = new Map(sourceOverrides.map(({ wrapperId, ...post }) => [wrapperId, post]));
+
+export const fanComments: FanComment[] = source.posts.flatMap((post) => {
+  if (excluded.has(post.id)) return [];
+  const displayed = overrides.get(post.id) ?? post;
+  const avatarName = new URL(post.author.avatarUrl).pathname.split('/').at(-1);
+  if (!avatarName) return [];
+  return [{
+    id: displayed.id,
+    name: post.author.displayName,
+    handle: post.author.handle,
+    comment: displayed.text,
+    date: displayed.postedAt.slice(0, 10),
+    sourceLink: displayed.url,
+    avatar: `${assetRoot}/${avatarName}`,
+    platform: 'X',
+  }];
+});
+
+if (fanComments.length !== source.posts.length - excluded.size) throw new Error('ファンコメントの除外件数が不正です');
+if (new Set(fanComments.map((comment) => comment.id)).size !== fanComments.length) throw new Error('ファンコメントが重複しています');

@@ -4,6 +4,7 @@ const readJson = async (path) => JSON.parse(await readFile(new URL(path, import.
 const twitter = await readJson('../data/fanart-twitter-export.json');
 const media = await readJson('../data/fanart-media.json');
 const patrol = await readJson('../data/fanart-patrol-media.json');
+const collage = await readJson('../data/fanart-collage-media.json');
 const outputUrl = new URL('../data/fanart-twitter-merged.json', import.meta.url);
 const assetBase = 'https://assets.houtougumi-memorial.anatofuz.net';
 
@@ -46,7 +47,7 @@ for (const post of media.posts) {
 for (const post of patrol.posts.flatMap((item) => [item, item.replyTo].filter(Boolean))) {
   const existing = posts.get(post.sourceUrl);
   if (existing) {
-    if (!existing.tags.includes('桃汁パトロール')) existing.tags.push('桃汁パトロール');
+    if (!existing.tags.includes('桃汁ぱとろーる')) existing.tags.push('桃汁ぱとろーる');
     continue;
   }
   posts.set(post.sourceUrl, {
@@ -54,7 +55,18 @@ for (const post of patrol.posts.flatMap((item) => [item, item.replyTo].filter(Bo
     author: post.author,
     postedAt: post.postedAt,
     text: post.text,
-    tags: ['桃汁パトロール'],
+    tags: ['桃汁ぱとろーる'],
+    media: post.media.map(remoteMedia),
+  });
+}
+
+for (const post of collage.posts) {
+  posts.set(post.sourceUrl, {
+    sourceUrl: post.sourceUrl,
+    author: post.author,
+    postedAt: post.postedAt,
+    text: post.text,
+    tags: ['桃汁クソコラグランプリ'],
     media: post.media.map(remoteMedia),
   });
 }
@@ -67,7 +79,7 @@ if (merged.some((post, index) => index && Date.parse(merged[index - 1].postedAt)
 
 await writeFile(outputUrl, `${JSON.stringify({
   generatedAt: new Date().toISOString(),
-  sources: ['#桃汁ぱとろーる', '#桃汁パトロール'],
+  sources: ['#桃汁ぱとろーる', '#桃汁クソコラグランプリ'],
   count: merged.length,
   posts: merged,
 }, null, 2)}\n`);
