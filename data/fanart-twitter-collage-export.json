@@ -1,8 +1,8 @@
 {
-  "exportedAt": "2026-08-08T11:27:56.371Z",
+  "exportedAt": "2026-08-08T11:45:12.337Z",
   "query": "#桃汁クソコラグランプリ",
   "source": "X latest search",
-  "count": 122,
+  "count": 123,
   "posts": [
     {
       "sourceUrl": "https://x.com/ODIzKv1IQqoRAEO/status/2066722842973196697",
@@ -2687,6 +2687,29 @@
       "postedAt": "2023-05-19T11:59:40.000Z",
       "text": "桃汁クソコラグランプリ、開催しますか\n#桃汁クソコラグランプリ",
       "media": [],
+      "replyTo": null
+    },
+    {
+      "sourceUrl": "https://x.com/AnaTofuZ/status/1659520201032105985",
+      "id": "1659520201032105985",
+      "author": {
+        "name": "八雲アナグラ",
+        "handle": "@AnaTofuZ",
+        "url": "https://x.com/AnaTofuZ"
+      },
+      "postedAt": "2023-05-19T11:23:42.000Z",
+      "text": "おれは退勤してから一体何を",
+      "media": [
+        {
+          "type": "video",
+          "id": "1659519868201472000",
+          "sourceUrl": "https://video.twimg.com/ext_tw_video/1659519868201472000/pu/vid/640x360/ZyVM2fSErpXTiT8I.mp4?tag=12",
+          "posterUrl": "https://pbs.twimg.com/ext_tw_video_thumb/1659519868201472000/pu/img/a2-dk42UFWFxilTU.jpg",
+          "width": 640,
+          "height": 360,
+          "duration": 37.536
+        }
+      ],
       "replyTo": null
     }
   ]

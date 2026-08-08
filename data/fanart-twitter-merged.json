@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-08-08T11:33:58.097Z",
+  "generatedAt": "2026-08-08T11:45:26.071Z",
   "sources": [
     "#桃汁ぱとろーる",
     "#桃汁クソコラグランプリ"
   ],
-  "count": 391,
+  "count": 392,
   "posts": [
     {
       "sourceUrl": "https://x.com/AlexVJP/status/2085582202516144384",
@@ -7408,6 +7408,31 @@
         "桃汁クソコラグランプリ"
       ],
       "media": []
+    },
+    {
+      "sourceUrl": "https://x.com/AnaTofuZ/status/1659520201032105985",
+      "author": {
+        "name": "八雲アナグラ",
+        "handle": "@AnaTofuZ",
+        "url": "https://x.com/AnaTofuZ"
+      },
+      "postedAt": "2023-05-19T11:23:42.000Z",
+      "text": "おれは退勤してから一体何を",
+      "tags": [
+        "桃汁クソコラグランプリ"
+      ],
+      "media": [
+        {
+          "type": "video",
+          "id": "1659519868201472000",
+          "sourceUrl": "https://video.twimg.com/ext_tw_video/1659519868201472000/pu/vid/640x360/ZyVM2fSErpXTiT8I.mp4?tag=12",
+          "posterUrl": "https://assets.houtougumi-memorial.anatofuz.net/fanart/images/twitter-collage/1659519868201472000.jpg",
+          "width": 640,
+          "height": 360,
+          "duration": 37.536,
+          "url": "https://assets.houtougumi-memorial.anatofuz.net/fanart/videos/collage/1659519868201472000.mp4"
+        }
+      ]
     },
     {
       "sourceUrl": "https://x.com/PO_U_PC_343/status/1658000783147954177",
