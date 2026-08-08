@@ -14,7 +14,7 @@ const paddingBottom = aspectRatio === '16/9' ? '56.25%' : '75%';
 <div class="relative w-full overflow-hidden rounded-2xl shadow-md" style={`padding-bottom: ${paddingBottom}`}>
   <lite-youtube
     class="absolute inset-0 h-full w-full"
-    style="max-width: none"
+    style="position: absolute; max-width: none"
     videoid={videoId}
     title={title}
     playlabel={`再生: ${title}`}
