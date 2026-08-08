@@ -25,7 +25,7 @@
 | 司令官 | 英語名、紹介文、エピソード、アーカイブ、語録 | `src/data/members.ts` |  | 未着手 |
 | 楽曲 | 曲名、参加者、説明、公開日、YouTube URL、タグ | `src/data/music.ts` |  | 未着手 |
 | 年表 | 日付、分類、見出し、説明、関連URL | `src/data/timeline.ts` |  | 未着手 |
-| グッズ | 商品名、説明、価格、販売状態、購入URL | `src/data/goods.ts` |  | 未着手 |
+| グッズ | 商品名、説明、価格、販売状態、購入URL | `data/stores/houtoumomojiru.json`、`src/data/goods.ts` |  | 確認中 |
 | ファンコメント | 表示名、本文、投稿日、媒体 | `src/data/comments.ts` |  | 未着手 |
 | ファンアート | 作者名、作者URL、説明、タグ、対象メンバー | `src/data/fanart.ts` |  | 未着手 |
 | 各ページ説明 | 音楽、グッズ、コメント、ファンアートの導入文 | `src/pages/*.astro` |  | 未着手 |
