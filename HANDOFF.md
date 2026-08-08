@@ -4,9 +4,10 @@
 
 ## セッション開始時に行うこと
 
-PR #13までマージ済み。セッション開始時に`master`を更新してから作業する。
+PR #14までマージ済み。セッション開始時に`master`を更新する。
 
 ```sh
+git switch master
 git pull --ff-only
 npm ci
 npm run check
@@ -14,10 +15,47 @@ npm run build
 ```
 
 - 現在のローカルブランチ: `master`
-- 引き継ぎ更新前の`master`: `5db2096 Merge pull request #13 from AnaTofuZ/agent/download-fanart-media`
+- PR #14のマージコミット: `f6af6ad Merge pull request #14 from AnaTofuZ/feat/comments-and-collage-gallery`
 - 作業ツリー: clean
+- [PR #14 ファンコメントとクソコラ作品を公開する](https://github.com/AnaTofuZ/houtougumi-memorial/pull/14)はマージ済み
+- PR #14のGitHub Actions `verify` とCloudflare Workers Buildsは成功
 - 公開先: <https://houtougumi-memorial.anatofuz.net/>
 - `master`へのマージでCloudflareの本番デプロイが動く。手動の`npm run deploy`は実行しない。
+
+## PR #14で完了した変更
+
+### ファンコメント
+
+- `data/x/arigato-nasu-houtougumi.json`の279投稿から7件を除外し、272件を掲載。
+- 除外IDは`data/x/fan-comment-excluded-ids.json`。無関係、タグのみ、公式告知、完全重複を対象にしている。
+- 保留・タグのみ投稿のうち引用元がある5件は、`data/x/fan-comment-source-overrides.json`で引用元本文・日時・URLへ差し替え。投稿者名とアイコンは元のラッパー投稿を維持する。
+- コメントは24件ずつ12個の静的ページ（`/comments/`、`/comments/2/`以降）へ分割。一括ロードしない。
+- 投稿者アイコンはR2の`comments/avatars/**`へ配置し、Astro `Image`でWebP最適化する。`RemoteImageNotAllowed`は設定済みパスで解消済み。
+- 除外内容を再確認・変更する場合は、上記7件を`data/x/fan-comment-excluded-ids.json`で確認する。
+
+### ファンアート・クソコラ
+
+- `#桃汁クソコラグランプリ`は123投稿、媒体136件。画像・動画をR2へ配置済み。
+- タグなしの`AnaTofuZ/status/1659520201032105985`はクソコラとして追加済み。
+- `romadeco_0A0/status/2037849175753400370`は通常ファンアートとして追加し、`桃汁ぱとろーる`タグに分類済み。
+- 統合データは393投稿、URL重複除外後475作品（`桃汁ぱとろーる`339、クソコラ136）。
+- 全作品は24件ずつ20ページ、タグ別は`桃汁ぱとろーる`15ページ、クソコラ6ページへ静的分割。一括ロードしない。
+- `桃汁パトロール`は`桃汁ぱとろーる`へ正規化する。
+- カード画像はAstro `Image`で800px WebPへ変換。ダイアログの素の`img`は、クリックしたカードの最適化済み`/_astro/*.webp` URLを再利用するための表示器で、R2元画像を直接配信しない。
+
+### 確認コマンド
+
+```sh
+node scripts/check-comments-data.mjs
+node scripts/check-generated-pages.mjs
+node scripts/download-fanart-patrol-media.mjs --check
+npm run check
+npm run build
+npm audit --omit=dev
+```
+
+- ローカルブラウザでコメント・ファンアート各24件、前後ページ、タグ別ページ、作品ダイアログ、コンソールエラーなしを確認済み。
+- `scripts/check-generated-pages.mjs`はコメント12ページ、全ファンアート20ページ、タグ別15/6ページと各ページ最大24件を検証する。
 
 ## 完了した変更
 
@@ -72,9 +110,9 @@ npm run build
 R2は元画像の保管場所であり、ブラウザへ必ず元画像を直送しているわけではない。
 
 - `astro.config.mjs`の`image.remotePatterns`で`assets.houtougumi-memorial.anatofuz.net/fanart/images/**`を許可済み。
-- ギャラリーはAstroの`<Image inferSize format="webp">`を使用。
+- ギャラリーカードはAstroの`<Image width={800} height={800} format="webp">`を使用。
 - prerender時にAstroがR2画像を取得・変換し、生成サイトの`/_astro/*.webp`として配信する。
-- 確認したビルドでは最適化画像が717件生成され、生成HTMLにR2の元画像URLは残らなかった。
+- 確認したビルドでは最適化画像が916件生成された。
 - 動画はAstroの画像最適化対象外なので、MP4をR2/CDNから直接配信する。
 - 別のR2画像パスを追加する場合は、必要最小限のパスを`image.remotePatterns`へ追加する。
 
