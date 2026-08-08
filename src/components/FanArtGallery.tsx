@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface FanArt {
   id: string;
@@ -16,13 +16,18 @@ interface Props {
 export default function FanArtGallery({ artworks }: Props) {
   const [selected, setSelected] = useState<FanArt | null>(null);
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (selected && !dialogRef.current?.open) dialogRef.current?.showModal();
+  }, [selected]);
 
   const open = (art: FanArt, idx: number) => {
     setSelected(art);
     setSelectedIdx(idx);
   };
 
-  const close = () => setSelected(null);
+  const close = () => dialogRef.current?.close();
 
   const goPrev = () => {
     const newIdx = (selectedIdx - 1 + artworks.length) % artworks.length;
@@ -41,14 +46,17 @@ export default function FanArtGallery({ artworks }: Props) {
       {/* Masonry grid */}
       <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
         {artworks.map((art, idx) => (
-          <div
+          <button
+            type="button"
             key={art.id}
-            className="break-inside-avoid mb-4 rounded-2xl overflow-hidden cursor-pointer group relative shadow-sm hover:shadow-lg transition-shadow"
+            className="block w-full text-left break-inside-avoid mb-4 rounded-2xl overflow-hidden cursor-pointer group relative shadow-sm hover:shadow-lg transition-shadow"
             onClick={() => open(art, idx)}
           >
             <img
               src={art.src}
               alt={art.alt}
+              loading="lazy"
+              decoding="async"
               className="w-full h-auto block group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 const wrapper = (e.currentTarget as HTMLImageElement).parentElement;
@@ -80,15 +88,20 @@ export default function FanArtGallery({ artworks }: Props) {
                 )}
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
 
       {/* Lightbox */}
       {selected && (
-        <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={close}
+        <dialog
+          ref={dialogRef}
+          aria-labelledby="fanart-dialog-title"
+          className="fixed inset-0 z-50 m-0 h-full max-h-none w-full max-w-none border-0 bg-black/85 p-4 text-inherit backdrop:bg-transparent open:flex items-center justify-center"
+          onClose={() => setSelected(null)}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) close();
+          }}
         >
           {/* Prev button */}
           {artworks.length > 1 && (
@@ -106,18 +119,20 @@ export default function FanArtGallery({ artworks }: Props) {
           {/* Image card */}
           <div
             className="relative max-w-2xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
           >
+            <h2 id="fanart-dialog-title" className="sr-only">{selected.alt}</h2>
             <button
               className="absolute top-3 right-3 z-20 w-8 h-8 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors text-sm"
               onClick={close}
               aria-label="閉じる"
+              autoFocus
             >
               ✕
             </button>
             <img
               src={selected.src}
               alt={selected.alt}
+              decoding="async"
               className="w-full max-h-[75vh] object-contain block"
             />
             <div className="px-5 py-3 bg-white text-center">
@@ -157,7 +172,7 @@ export default function FanArtGallery({ artworks }: Props) {
               </svg>
             </button>
           )}
-        </div>
+        </dialog>
       )}
     </>
   );
