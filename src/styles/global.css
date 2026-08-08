@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@view-transition {
+  navigation: auto;
+}
+
 @theme {
   /* ブランドカラー */
   --color-primary: #EE3F87;
@@ -56,6 +60,10 @@
     line-height: 1.75;
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.7s ease;
+  }
+
+  header {
+    view-transition-name: site-header;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -192,5 +200,11 @@
 @media (prefers-reduced-motion: reduce) {
   .fade-in-up, .float-anim {
     animation: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
