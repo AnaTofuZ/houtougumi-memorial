@@ -55,7 +55,7 @@ const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}â€
     </div>
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="goods-grid">
-      {products.map((product) => {
+      {products.map((product, index) => {
         const productCategories = product.categories.map((category) => category.name);
         const categoryValue = productCategories.length ? productCategories.join('|') : 'æœªåˆ†é¡ž';
         const searchValue = `${product.name} ${productCategories.join(' ')}`.toLocaleLowerCase('ja');
@@ -84,7 +84,8 @@ const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}â€
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   format="webp"
                   fit="contain"
-                  loading="lazy"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
                   decoding="async"
                   class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
@@ -123,7 +124,7 @@ const summarize = (text: string) => text.length > 140 ? `${text.slice(0, 140)}â€
   </div>
 </section>
 
-<GoodsDetailDialog client:load />
+<GoodsDetailDialog client:idle />
 
 <script>
   const search = document.querySelector<HTMLInputElement>('#goods-search');

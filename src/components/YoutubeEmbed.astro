@@ -1,4 +1,6 @@
 ---
+import 'lite-youtube-embed/src/lite-yt-embed.css';
+
 interface Props {
   videoId: string;
   title?: string;
@@ -10,13 +12,15 @@ const paddingBottom = aspectRatio === '16/9' ? '56.25%' : '75%';
 ---
 
 <div class="relative w-full overflow-hidden rounded-2xl shadow-md" style={`padding-bottom: ${paddingBottom}`}>
-  <iframe
-    class="absolute top-0 left-0 w-full h-full"
-    src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+  <lite-youtube
+    class="absolute inset-0 h-full w-full"
+    style="max-width: none"
+    videoid={videoId}
     title={title}
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-    loading="lazy"
-    referrerpolicy="strict-origin-when-cross-origin"
-  ></iframe>
+    playlabel={`再生: ${title}`}
+  ></lite-youtube>
 </div>
+
+<script>
+  import 'lite-youtube-embed';
+</script>
