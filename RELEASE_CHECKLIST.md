@@ -59,7 +59,7 @@
 - [x] `src/pages/404.astro` を追加する
 - [ ] 画像へ `width` と `height` を設定する
 - [x] 画面外画像へ `loading="lazy"` を設定する
-- [ ] 正式画像をWebPまたはAVIFなどへ最適化する
+- [ ] 正式画像を `astro:assets` の `Image` または `Picture` で最適化する
 - [x] Google FontsとYouTube埋め込みによる外部通信を確認する
 - [x] 外部通信に関する案内をフッターへ掲載する
 

@@ -36,16 +36,16 @@
 
 | 用途 | 必要数・目安 | 配置先 | 作者・権利者 | 出典・許可記録 | ステータス |
 | --- | --- | --- | --- | --- | --- |
-| ヒーロー画像 | 1点 | `public/images/` |  |  | 未着手 |
-| メンバー立ち絵 | 各1〜3点 | `public/images/members/` |  |  | 未着手 |
-| トップ装飾画像 | 必要数 | `public/images/members/` |  |  | 未着手 |
-| 楽曲サムネイル | 各曲1点 | `public/images/music/` |  |  | 未着手 |
-| グッズ画像 | 各商品1点 | `public/images/goods/` |  |  | 未着手 |
-| ファンアート | 各作品1点 | `public/images/fanart/` |  |  | 未着手 |
+| ヒーロー画像 | 1点 | `src/assets/images/` |  |  | 未着手 |
+| メンバー立ち絵 | 各1〜3点 | `src/assets/images/members/` |  |  | 未着手 |
+| トップ装飾画像 | 必要数 | `src/assets/images/members/` |  |  | 未着手 |
+| 楽曲サムネイル | 各曲1点 | `src/assets/images/music/` |  |  | 未着手 |
+| グッズ画像 | 各商品1点 | `src/assets/images/goods/` |  |  | 未着手 |
+| ファンアート | 各作品1点 | `src/assets/images/fanart/` |  |  | 未着手 |
 | OGP画像 | 1200×630 PNGまたはJPEG | `public/` |  |  | 未着手 |
 | favicon | SVGとICO | `public/` |  |  | 未着手 |
 
-正式画像を追加するときは、適切な代替テキスト、表示サイズ、元画像の縦横サイズも記録する。
+正式画像を追加するときは `astro:assets` の `Image` または `Picture` を使い、適切な代替テキスト、表示サイズ、元画像の縦横サイズも記録する。
 
 ## 掲載許可・出典
 
