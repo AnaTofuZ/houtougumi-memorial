@@ -79,7 +79,7 @@ import chibi from '../assets/images/members/chibi.png';
       <p class="text-center text-xs font-(family-name:--font-en) text-[#C22368] tracking-widest mb-2 font-bold">FAN ART</p>
       <h2 class="section-title text-2xl md:text-3xl mb-4">ファンイラスト</h2>
       <p class="text-center text-base text-[#595959] mb-10">
-        ※ こちらはダミーの説明文です。ファンイラストの紹介文が入ります。
+        「#桃汁ぱとろーる」などに寄せられた作品をご覧ください。
       </p>
 
       <div class="grid grid-cols-3 md:grid-cols-6 gap-3 max-w-2xl mx-auto mb-8">
@@ -89,25 +89,19 @@ import chibi from '../assets/images/members/chibi.png';
               href="/fanart"
               class="aspect-square rounded-xl overflow-hidden hover:scale-105 transition-transform shadow-sm hover:shadow-md bg-[#FFD6E0]"
             >
-              <img
-                src={art.src}
+              <Image
+                src={art.type === 'video' ? art.poster : art.image}
                 alt={art.alt}
-                width={art.width}
-                height={art.height}
+                inferSize
+                width={400}
+                format="webp"
                 loading="lazy"
                 decoding="async"
                 class="w-full h-full object-cover"
-                onerror="this.style.display='none'"
               />
             </a>
           ))
         }
-      </div>
-
-      <div class="flex justify-center gap-4 mb-8 opacity-50">
-        <img src="/images/fanart/fanart-placeholder-1.svg" alt="ファンイラスト（仮）" loading="lazy" decoding="async" class="w-24 h-24 rounded-2xl object-cover shadow-sm" />
-        <img src="/images/fanart/fanart-placeholder-2.svg" alt="ファンイラスト（仮）" loading="lazy" decoding="async" class="w-24 h-24 rounded-2xl object-cover shadow-sm" />
-        <img src="/images/fanart/fanart-placeholder-3.svg" alt="ファンイラスト（仮）" loading="lazy" decoding="async" class="w-24 h-24 rounded-2xl object-cover shadow-sm" />
       </div>
 
       <div class="text-center">

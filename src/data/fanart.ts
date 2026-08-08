@@ -1,74 +1,70 @@
-import { getImage } from 'astro:assets';
-import kari from '../assets/images/kari.png';
+import merged from '../../data/fanart-twitter-merged.json';
 
-export interface FanArt {
+interface FanArtBase {
   id: string;
-  src: string;
-  width: number;
-  height: number;
   alt: string;
   artist: string;
-  artistLink?: string;
-  tags?: string[];
-  members?: ('momojiru' | 'boss' | 'shirei')[];
+  artistLink: string;
+  sourceLink: string;
+  tags: string[];
 }
 
-const placeholder = await getImage({ src: kari, width: 800, format: 'webp' });
-const placeholderImage = {
-  src: placeholder.src,
-  width: Number(placeholder.attributes.width),
-  height: Number(placeholder.attributes.height),
-};
+export interface FanArtImage extends FanArtBase {
+  type: 'image';
+  image: string;
+}
 
-// ↓ ファンイラストの情報に書き換えてください
-// 画像は src/assets/images/fanart/ に配置してください
-export const fanarts: FanArt[] = [
-  {
-    id: '1',
-    ...placeholderImage,
-    alt: 'ほうとう組。ファンアート 1',
-    artist: '（作者名）',
-    tags: ['3人'],
-    members: ['momojiru', 'boss', 'shirei'],
-  },
-  {
-    id: '2',
-    ...placeholderImage,
-    alt: 'ほうとう組。ファンアート 2',
-    artist: '（作者名）',
-    tags: ['宝灯桃汁'],
-    members: ['momojiru'],
-  },
-  {
-    id: '3',
-    ...placeholderImage,
-    alt: 'ほうとう組。ファンアート 3',
-    artist: '（作者名）',
-    tags: ['ボス'],
-    members: ['boss'],
-  },
-  {
-    id: '4',
-    ...placeholderImage,
-    alt: 'ほうとう組。ファンアート 4',
-    artist: '（作者名）',
-    tags: ['司令官'],
-    members: ['shirei'],
-  },
-  {
-    id: '5',
-    ...placeholderImage,
-    alt: 'ほうとう組。ファンアート 5',
-    artist: '（作者名）',
-    tags: ['3人'],
-    members: ['momojiru', 'boss', 'shirei'],
-  },
-  {
-    id: '6',
-    ...placeholderImage,
-    alt: 'ほうとう組。ファンアート 6',
-    artist: '（作者名）',
-    tags: ['宝灯桃汁', 'ボス'],
-    members: ['momojiru', 'boss'],
-  },
-];
+export interface FanArtVideo extends FanArtBase {
+  type: 'video';
+  src: string;
+  poster: string;
+  width: number;
+  height: number;
+}
+
+export type FanArt = FanArtImage | FanArtVideo;
+
+interface MergedMedia {
+  type: 'image' | 'video';
+  url: string;
+  posterUrl?: string;
+  width?: number;
+  height?: number;
+}
+
+const seen = new Set<string>();
+
+export const fanarts: FanArt[] = merged.posts.flatMap((post) => {
+  const common = {
+    artist: post.author.name,
+    artistLink: post.author.url,
+    sourceLink: post.sourceUrl,
+    tags: post.tags,
+  };
+
+  return (post.media as MergedMedia[]).flatMap((item): FanArt[] => {
+    if (seen.has(item.url)) return [];
+    seen.add(item.url);
+
+    if (item.type === 'image') {
+      return [{
+        ...common,
+        id: `image-${item.url.split('/').at(-1)}`,
+        type: 'image',
+        image: item.url,
+        alt: `${post.author.name}さんの投稿画像`,
+      }];
+    }
+    if (!item.posterUrl) return [];
+    return [{
+      ...common,
+      id: `video-${item.url.split('/').at(-1)}`,
+      type: 'video',
+      src: item.url,
+      poster: item.posterUrl,
+      width: item.width ?? 0,
+      height: item.height ?? 0,
+      alt: `${post.author.name}さんの投稿動画`,
+    }];
+  });
+});

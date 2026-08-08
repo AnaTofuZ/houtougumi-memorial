@@ -1,0 +1,178 @@
+---
+import { Image } from 'astro:assets';
+import type { FanArt } from '../data/fanart';
+
+interface Props {
+  artworks: FanArt[];
+}
+
+const { artworks } = Astro.props;
+const firstPreview = artworks[0].type === 'video' ? artworks[0].poster : artworks[0].image;
+---
+
+<div data-fanart-gallery>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {artworks.map((art, idx) => {
+      const preview = art.type === 'video' ? art.poster : art.image;
+      return (
+        <button
+          type="button"
+          class="block aspect-square w-full text-left rounded-2xl overflow-hidden cursor-pointer group relative shadow-sm hover:shadow-lg transition-shadow bg-[#FFD6E0]"
+          data-fanart-card
+          data-type={art.type}
+          data-media-src={art.type === 'video' ? art.src : undefined}
+          data-title={art.alt}
+          data-artist={art.artist}
+          data-artist-link={art.artistLink}
+          data-source-link={art.sourceLink}
+          data-tags={art.tags.map((tag) => `#${tag}`).join(' ')}
+        >
+          <Image
+            src={preview}
+            alt={art.alt}
+            inferSize
+            format="webp"
+            loading={idx === 0 ? 'eager' : 'lazy'}
+            priority={idx === 0}
+            class="w-full h-full object-cover block group-hover:scale-105 transition-transform duration-300"
+          />
+          {art.type === 'video' && (
+            <span class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+              <span class="flex h-12 w-12 items-center justify-center rounded-full bg-black/65 text-xl text-white shadow-lg">▶</span>
+            </span>
+          )}
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-end pointer-events-none">
+            <div class="w-full bg-gradient-to-t from-black/70 to-transparent p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <p class="text-white text-xs font-medium">by {art.artist}</p>
+              <div class="flex flex-wrap gap-1 mt-1">
+                {art.tags.map((tag) => <span class="text-white/70 text-xs">#{tag}</span>)}
+              </div>
+            </div>
+          </div>
+        </button>
+      );
+    })}
+  </div>
+
+  <dialog
+    data-fanart-dialog
+    aria-labelledby="fanart-dialog-title"
+    class="fixed inset-0 z-50 m-0 h-full max-h-none w-full max-w-none border-0 bg-black/85 p-4 text-inherit backdrop:bg-transparent open:flex items-center justify-center"
+  >
+    {artworks.length > 1 && (
+      <button
+        type="button"
+        data-fanart-prev
+        class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 transition-colors z-10"
+        aria-label="前の作品"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+    )}
+
+    <div class="relative max-w-2xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl">
+      <h2 id="fanart-dialog-title" data-fanart-title class="sr-only"></h2>
+      <button
+        type="button"
+        data-fanart-close
+        class="absolute top-3 right-3 z-20 w-8 h-8 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors text-sm"
+        aria-label="閉じる"
+      >
+        ✕
+      </button>
+      <Image
+        data-fanart-image
+        src={firstPreview}
+        alt=""
+        inferSize
+        format="webp"
+        class="w-full max-h-[75vh] object-contain block"
+      />
+      <video data-fanart-video controls playsinline preload="metadata" class="hidden w-full max-h-[75vh] bg-black object-contain">
+        <source data-fanart-video-source type="video/mp4" />
+      </video>
+      <div class="px-5 py-3 bg-white text-center">
+        <a data-fanart-artist target="_blank" rel="noopener noreferrer" class="text-sm text-[#EE3F87] font-medium hover:underline"></a>
+        <div class="flex flex-wrap gap-2 justify-center mt-1">
+          <span data-fanart-tags class="text-xs text-[#444444] bg-[#FFE1EE] px-2 py-0.5 rounded-full"></span>
+        </div>
+        <a data-fanart-source target="_blank" rel="noopener noreferrer" class="mt-2 block text-xs text-[#595959] hover:underline">
+          元の投稿を見る ↗
+        </a>
+      </div>
+    </div>
+
+    {artworks.length > 1 && (
+      <button
+        type="button"
+        data-fanart-next
+        class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 transition-colors z-10"
+        aria-label="次の作品"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    )}
+  </dialog>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-fanart-gallery]');
+  if (root) {
+    const cards = [...root.querySelectorAll<HTMLButtonElement>('[data-fanart-card]')];
+    const dialog = root.querySelector<HTMLDialogElement>('[data-fanart-dialog]');
+    const image = root.querySelector<HTMLImageElement>('[data-fanart-image]');
+    const video = root.querySelector<HTMLVideoElement>('[data-fanart-video]');
+    const videoSource = root.querySelector<HTMLSourceElement>('[data-fanart-video-source]');
+    const title = root.querySelector<HTMLElement>('[data-fanart-title]');
+    const artist = root.querySelector<HTMLAnchorElement>('[data-fanart-artist]');
+    const source = root.querySelector<HTMLAnchorElement>('[data-fanart-source]');
+    const tags = root.querySelector<HTMLElement>('[data-fanart-tags]');
+    let selected = 0;
+
+    const open = (index: number) => {
+      if (!dialog || !image || !video || !videoSource || !title || !artist || !source || !tags) return;
+      selected = (index + cards.length) % cards.length;
+      const card = cards[selected];
+      const preview = card.querySelector('img');
+      const previewSrc = preview?.currentSrc || preview?.src || '';
+
+      title.textContent = card.dataset.title || '';
+      artist.textContent = `by ${card.dataset.artist || ''} ↗`;
+      artist.href = card.dataset.artistLink || '';
+      source.href = card.dataset.sourceLink || '';
+      tags.textContent = card.dataset.tags || '';
+      if (card.dataset.type === 'video') {
+        image.classList.add('hidden');
+        video.classList.remove('hidden');
+        video.poster = previewSrc;
+        videoSource.src = card.dataset.mediaSrc || '';
+        video.load();
+        void video.play().catch(() => {});
+      } else {
+        video.pause();
+        video.classList.add('hidden');
+        image.classList.remove('hidden');
+        image.src = previewSrc;
+        image.alt = card.dataset.title || '';
+      }
+      if (!dialog.open) dialog.showModal();
+    };
+
+    cards.forEach((card, index) => card.addEventListener('click', () => open(index)));
+    root.querySelector('[data-fanart-close]')?.addEventListener('click', () => dialog?.close());
+    root.querySelector('[data-fanart-prev]')?.addEventListener('click', () => open(selected - 1));
+    root.querySelector('[data-fanart-next]')?.addEventListener('click', () => open(selected + 1));
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog?.addEventListener('close', () => {
+      video?.pause();
+      videoSource?.removeAttribute('src');
+      video?.load();
+    });
+  }
+</script>
