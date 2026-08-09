@@ -45,12 +45,28 @@ export const timeline: TimelineEvent[] = [
     link: 'https://houtoumomojiru.info/%e5%ae%9d%e7%81%af%e6%a1%83%e6%b1%81%e7%8b%ac%e7%ab%8b%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/',
   },
   {
+    id: 'first-offline-fan-exchange',
+    date: '2023-03-03',
+    category: 'オフイベ',
+    title: '初めてファンとオフラインで交流',
+    description: '甲府市主催の「ニューノーマル時代への挑戦！課題解決 無尽会」にパネラーとして出演し、初めてファンとオフラインで交流しました。',
+    link: 'https://houtoumomojiru.info/%e7%94%b2%e5%ba%9c%e5%b8%82%e4%b8%bb%e5%82%ac-%e3%83%88%e3%83%bc%e3%82%af%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88%e5%9e%8b%e3%82%bb%e3%83%9f%e3%83%8a%e3%83%bc%e3%80%8c%e3%83%8b%e3%83%a5%e3%83%bc%e3%83%8e/',
+  },
+  {
     id: 'locopro-founded',
     date: '2023-04-11',
     category: '思い出',
     title: 'ご当地発進型VTuber事務所「ろこぷろ」を設立',
     description: '宝灯桃汁の運営が、地域とVTuberをつなぐ「ろこぷろ」の設立を発表しました。',
     link: 'https://houtoumomojiru.info/%e5%ae%9d%e7%81%af%e6%a1%83%e6%b1%81%e9%81%8b%e5%96%b6%e3%81%8c%e3%80%8c%e3%81%94%e5%bd%93%e5%9c%b0%e7%99%ba%e9%80%b2%e5%9e%8bvtuber%e4%ba%8b%e5%8b%99%e6%89%80%e3%82%8d%e3%81%93%e3%81%b7%e3%82%8d/',
+  },
+  {
+    id: 'first-self-hosted-offline-event',
+    date: '2023-04-29',
+    category: 'オフイベ',
+    title: '初めての自主開催オフラインイベント',
+    description: '4月29日・30日の2日間、山梨県都留市で音声ガイド付きのまち歩きや限定お話会を楽しむ、初の自主開催オフラインイベントを開催しました。',
+    link: 'https://houtoumomojiru.info/sa7y3jos/',
   },
   {
     id: 'first-x-space',
