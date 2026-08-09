@@ -12,6 +12,8 @@
     "preview": "astro preview",
     "preview:cloudflare": "npm run build && wrangler dev",
     "review:fanart": "node scripts/serve-fanart-review.mjs",
+    "review:history": "node scripts/serve-history-review.mjs",
+    "sync:history-youtube": "node scripts/sync-history-youtube.mjs",
     "deploy": "npm run build && wrangler deploy",
     "astro": "astro"
   },
