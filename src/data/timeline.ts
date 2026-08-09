@@ -65,7 +65,7 @@ export const timeline: TimelineEvent[] = [
     date: '2023-07-08',
     category: 'オフイベ',
     title: '初のオフラインバスツアー',
-    description: '宝灯桃汁と山梨を巡る「山梨首都化研修」バスツアーを開催しました。',
+    description: '宝灯桃汁と山梨を巡る「山梨首都化研修」バスツアーを開催予告。残念ながら人数が届かず中止になる。',
     link: 'https://houtoumomojiru.info/%e3%82%aa%e3%83%95%e3%83%a9%e3%82%a4%e3%83%b3%e3%83%90%e3%82%b9%e3%83%84%e3%82%a2%e3%83%bc%e9%96%8b%e5%82%ac%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/',
   },
   {
