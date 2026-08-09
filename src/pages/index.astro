@@ -38,10 +38,18 @@ import { fanComments } from '../data/comments';
       <p class="text-center text-xs font-(family-name:--font-en) text-[#555555] tracking-widest mb-2 font-bold">HISTORY</p>
       <h2 class="section-title text-2xl md:text-3xl mb-4">あゆみ</h2>
       <p class="text-center text-base text-[#595959] mb-12">
-        ※ こちらはダミーのリード文です。「ほうとう組。」の歩みを振り返る文章が入ります。
+        2022年の始動から引退後の再会まで。「ほうとう組。」がみんなと重ねた出来事を振り返ります。
       </p>
       <div class="max-w-3xl mx-auto">
         <Timeline events={timeline} />
+      </div>
+      <div class="text-center mt-10">
+        <a href="/history" class="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-[#555555] text-[#444444] font-bold hover:bg-white transition-colors text-sm">
+          あゆみをすべて見る
+          <svg class="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
       </div>
     </div>
   </section>

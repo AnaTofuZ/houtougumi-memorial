@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { historyEntries, historyPageCount, historyPageSize } from '../data/historyArchive';
+import { categoryColors } from '../data/timeline';
+
+const firstEntries = historyEntries.slice(0, historyPageSize);
+---
+
+<BaseLayout title="あゆみ全記録" description="公式サイトとXに残る「ほうとう組。」の活動記録です。">
+  <section class="pt-16 pb-10" data-scroll-bg="#ECECEC">
+    <div class="container mx-auto px-4 md:px-6 text-center">
+      <p class="tag text-white mb-4 inline-block bg-[#555555] font-bold">HISTORY ARCHIVE</p>
+      <h1 class="text-4xl md:text-5xl font-(family-name:--font-heading) font-extrabold mb-3">あゆみ全記録</h1>
+      <p class="text-base text-[#595959]">公式サイトとXの記録を整理し、2022年の始動から時系列でたどります（全{historyEntries.length}件）。</p>
+    </div>
+  </section>
+
+  <section class="pb-20" data-scroll-bg="#ECECEC">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="relative max-w-5xl mx-auto">
+        <div class="absolute left-5 md:left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-[#FFD3E8]"></div>
+        <div id="history-list" class="space-y-10">
+          {firstEntries.map((entry, index) => (
+            <div class={`relative flex md:gap-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`} style="content-visibility:auto;contain-intrinsic-size:auto 260px">
+              <div class="absolute left-5 md:left-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-white shadow-md z-10" style={`background-color:${categoryColors[entry.category]}`}></div>
+              <div class={`pl-14 md:pl-0 md:w-1/2 ${index % 2 === 0 ? 'md:pr-10' : 'md:pl-10'}`}>
+                <article class="card hover:shadow-lg transition-shadow">
+                  <div class="flex flex-wrap items-center gap-2 mb-2">
+                    <span class="tag text-white text-xs" style={`background-color:${categoryColors[entry.category]}`}>{entry.category}</span>
+                    <time class="text-xs text-[#444444]" datetime={entry.date}>{new Date(entry.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                  </div>
+                  <h2 class="font-bold text-lg mb-1">{entry.title}</h2>
+                  <p class="text-base text-[#444444] leading-[1.75]">{entry.description}</p>
+                  <div class="flex flex-wrap items-center gap-3 mt-3">
+                    <span class="text-xs text-[#595959]">{entry.sourceLabel}</span>
+                    <a href={entry.url} target="_blank" rel="noopener noreferrer" class="text-sm text-[#C22368] font-bold hover:underline">詳細を見る</a>
+                  </div>
+                </article>
+              </div>
+              <div class="hidden md:block md:w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {historyPageCount > 1 && (
+        <div class="mt-8 text-center">
+          <button id="history-loader" type="button" data-next-page="2" data-page-count={historyPageCount} class="rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#555555] shadow-sm hover:shadow-md transition-shadow">続きを読み込む</button>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  type HistoryEntry = { id: string; date: string; category: 'メディア掲載' | '配信' | 'コラボ配信' | '動画投稿' | 'オフイベ' | 'グッズ販売' | '思い出'; sourceLabel: string; title: string; description: string; url: string };
+
+  const list = document.getElementById('history-list');
+  const loader = document.getElementById('history-loader') as HTMLButtonElement | null;
+  const colors: Record<HistoryEntry['category'], string> = { 'メディア掲載': '#5B74D6', '配信': '#2AD1B2', 'コラボ配信': '#F09035', '動画投稿': '#8C6FE8', 'オフイベ': '#EE3F87', 'グッズ販売': '#40ACFA', '思い出': '#FF6FA8' };
+  let loading = false;
+  let entryIndex = list?.children.length ?? 0;
+
+  const addEntry = (entry: HistoryEntry) => {
+    const even = entryIndex++ % 2 === 0;
+    const row = document.createElement('div');
+    row.className = `relative flex md:gap-8 ${even ? 'md:flex-row' : 'md:flex-row-reverse'}`;
+    row.style.cssText = 'content-visibility:auto;contain-intrinsic-size:auto 260px';
+
+    const dot = document.createElement('div');
+    dot.className = 'absolute left-5 md:left-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-white shadow-md z-10';
+    dot.style.backgroundColor = colors[entry.category];
+    const side = document.createElement('div');
+    side.className = `pl-14 md:pl-0 md:w-1/2 ${even ? 'md:pr-10' : 'md:pl-10'}`;
+    const article = document.createElement('article');
+    article.className = 'card hover:shadow-lg transition-shadow';
+
+    const meta = document.createElement('div');
+    meta.className = 'flex flex-wrap items-center gap-2 mb-2';
+    const category = document.createElement('span');
+    category.className = 'tag text-white text-xs';
+    category.style.backgroundColor = colors[entry.category];
+    category.textContent = entry.category;
+    const time = document.createElement('time');
+    time.className = 'text-xs text-[#444444]';
+    time.dateTime = entry.date;
+    time.textContent = new Date(entry.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+    meta.append(category, time);
+
+    const title = document.createElement('h2');
+    title.className = 'font-bold text-lg mb-1';
+    title.textContent = entry.title;
+    const description = document.createElement('p');
+    description.className = 'text-base text-[#444444] leading-[1.75]';
+    description.textContent = entry.description;
+
+    const footer = document.createElement('div');
+    footer.className = 'flex flex-wrap items-center gap-3 mt-3';
+    const source = document.createElement('span');
+    source.className = 'text-xs text-[#595959]';
+    source.textContent = entry.sourceLabel;
+    const link = document.createElement('a');
+    link.className = 'text-sm text-[#C22368] font-bold hover:underline';
+    link.href = entry.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = '詳細を見る';
+    footer.append(source, link);
+
+    article.append(meta, title, description, footer);
+    side.append(article);
+    const spacer = document.createElement('div');
+    spacer.className = 'hidden md:block md:w-1/2';
+    row.append(dot, side, spacer);
+    list?.append(row);
+  };
+
+  const loadNext = async () => {
+    if (!loader || loading) return;
+    loading = true;
+    loader.disabled = true;
+    loader.textContent = '読み込み中…';
+    const page = Number(loader.dataset.nextPage);
+
+    try {
+      const response = await fetch(`/history-data/${page}.json`);
+      if (!response.ok) throw new Error(String(response.status));
+      const entries = await response.json() as HistoryEntry[];
+      entries.forEach(addEntry);
+      const nextPage = page + 1;
+      if (nextPage > Number(loader.dataset.pageCount)) {
+        loader.parentElement?.remove();
+        observer.disconnect();
+        return;
+      }
+      loader.dataset.nextPage = String(nextPage);
+      loader.textContent = '続きを読み込む';
+    } catch {
+      loader.textContent = '読み込めませんでした。再試行';
+    } finally {
+      loading = false;
+      loader.disabled = false;
+    }
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) void loadNext();
+  }, { rootMargin: '600px 0px' });
+
+  if (loader) {
+    loader.addEventListener('click', loadNext);
+    observer.observe(loader);
+  }
+</script>

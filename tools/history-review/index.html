@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>あゆみ掲載レビュー</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f7f4f5; color: #30272b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { position: sticky; top: 0; z-index: 2; padding: 16px max(16px, calc((100% - 1280px) / 2)); background: #f7f4f5ee; border-bottom: 1px solid #ded5d9; backdrop-filter: blur(12px); }
+    h1 { margin: 0 0 4px; font-size: 1.35rem; }
+    header p { margin: 0 0 12px; color: #6f6268; font-size: .9rem; }
+    .controls { display: grid; grid-template-columns: minmax(220px, 1fr) auto auto; gap: 8px; }
+    input, textarea, select, button { border: 1px solid #cfc3c8; border-radius: 9px; background: white; color: inherit; font: inherit; }
+    input[type="search"], input[type="text"], textarea, select { padding: 9px 11px; }
+    button { padding: 9px 13px; cursor: pointer; font-weight: 700; }
+    button.primary { border-color: #c92368; background: #c92368; color: white; }
+    button:disabled { cursor: wait; opacity: .6; }
+    :is(button, input, textarea, select, a):focus-visible { outline: 3px solid #ff91bd; outline-offset: 2px; }
+    main { max-width: 1280px; margin: 0 auto; padding: 18px 16px 64px; }
+    #status { margin: 0 0 14px; color: #6f6268; }
+    #entries { display: grid; grid-template-columns: repeat(auto-fill, minmax(390px, 1fr)); gap: 14px; }
+    article { border: 2px solid transparent; border-radius: 14px; background: white; box-shadow: 0 3px 14px #63324710; }
+    article.excluded { border-color: #777; background: #eee; opacity: .72; }
+    article.edited:not(.excluded) { border-color: #e85a92; }
+    .head { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; padding: 13px 13px 8px; }
+    .exclude { display: flex; align-items: center; gap: 5px; font-weight: 800; }
+    .exclude input { width: 20px; height: 20px; margin: 0; accent-color: #555; }
+    .meta { color: #75686e; font-size: .8rem; overflow-wrap: anywhere; }
+    .source { color: #aa1e57; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .fields { display: grid; gap: 9px; padding: 8px 13px 13px; }
+    label.field { display: grid; gap: 4px; font-size: .82rem; font-weight: 750; }
+    textarea { min-height: 112px; resize: vertical; line-height: 1.55; }
+    .actions { display: flex; justify-content: flex-end; }
+    .reset { padding: 6px 10px; font-size: .8rem; }
+    .empty { grid-column: 1 / -1; padding: 48px 0; text-align: center; color: #75686e; }
+    @media (max-width: 680px) {
+      header { position: static; }
+      .controls { grid-template-columns: 1fr 1fr; }
+      .controls input { grid-column: 1 / -1; }
+      #entries { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>あゆみ掲載レビュー</h1>
+    <p>除外対象を選び、必要な項目はタイトル・本文を編集して保存します。変更はローカルの管理JSONへ直接反映されます。</p>
+    <div class="controls">
+      <input id="search" type="search" placeholder="タイトル・本文・ID・掲載元を検索" aria-label="あゆみを検索">
+      <select id="filter" aria-label="表示対象">
+        <option value="all">すべて</option>
+        <option value="included">掲載のみ</option>
+        <option value="excluded">除外のみ</option>
+        <option value="edited">編集済みのみ</option>
+      </select>
+      <button id="save" type="button" class="primary">変更を保存</button>
+    </div>
+  </header>
+  <main>
+    <p id="status" role="status">読み込み中…</p>
+    <section id="entries" aria-label="あゆみ項目"></section>
+  </main>
+  <script>
+    const entriesElement = document.querySelector('#entries');
+    const statusElement = document.querySelector('#status');
+    const searchElement = document.querySelector('#search');
+    const filterElement = document.querySelector('#filter');
+    const saveButton = document.querySelector('#save');
+    let entries = [];
+    let excluded = new Set();
+    let edits = {};
+    let saved = '';
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    const edited = (id) => Boolean(edits[id] && Object.keys(edits[id]).length);
+    const valueOf = (entry, field) => edits[entry.id]?.[field] ?? entry[field];
+    const review = () => ({
+      excluded: [...excluded].sort(),
+      edits: Object.fromEntries(Object.entries(edits).filter(([, value]) => Object.keys(value).length).sort(([a], [b]) => a.localeCompare(b))),
+    });
+    const updateStatus = (visible = document.querySelectorAll('#entries article').length) => {
+      const changed = JSON.stringify(review()) !== saved;
+      statusElement.textContent = `${visible} / ${entries.length}件を表示 · ${excluded.size}件除外 · ${Object.keys(review().edits).length}件編集${changed ? ' · 未保存の変更あり' : ''}`;
+      saveButton.textContent = changed ? '変更を保存' : '保存済み';
+    };
+    const updateEdit = (entry, field, value) => {
+      edits[entry.id] ||= {};
+      if (value === entry[field]) delete edits[entry.id][field];
+      else edits[entry.id][field] = value;
+      if (!Object.keys(edits[entry.id]).length) delete edits[entry.id];
+    };
+    const render = () => {
+      const query = searchElement.value.trim().toLowerCase();
+      const filter = filterElement.value;
+      const visible = entries.filter((entry) => {
+        const isExcluded = excluded.has(entry.id);
+        const isEdited = edited(entry.id);
+        const matchesFilter = filter === 'all' || filter === 'excluded' && isExcluded || filter === 'included' && !isExcluded || filter === 'edited' && isEdited;
+        const text = `${entry.id}\n${entry.date}\n${entry.sourceLabel}\n${valueOf(entry, 'title')}\n${valueOf(entry, 'description')}`.toLowerCase();
+        return matchesFilter && (!query || text.includes(query));
+      });
+      entriesElement.innerHTML = visible.map((entry) => {
+        const isExcluded = excluded.has(entry.id);
+        const isEdited = edited(entry.id);
+        return `<article data-id="${escapeHtml(entry.id)}" class="${isExcluded ? 'excluded' : ''} ${isEdited ? 'edited' : ''}">
+          <div class="head">
+            <label class="exclude"><input type="checkbox" data-exclude ${isExcluded ? 'checked' : ''}>除外</label>
+            <div><strong>${escapeHtml(entry.date.slice(0, 10))}</strong><div class="meta">${escapeHtml(entry.sourceLabel)} · ${escapeHtml(entry.category)} · ${escapeHtml(entry.id)}</div></div>
+            <a class="source" href="${escapeHtml(entry.url)}" target="_blank" rel="noopener noreferrer">掲載元 ↗</a>
+          </div>
+          <div class="fields">
+            <label class="field">タイトル<input type="text" data-field="title" maxlength="300" value="${escapeHtml(valueOf(entry, 'title'))}"></label>
+            <label class="field">本文<textarea data-field="description" maxlength="2000">${escapeHtml(valueOf(entry, 'description'))}</textarea></label>
+            <div class="actions"><button type="button" class="reset" data-reset ${isEdited ? '' : 'disabled'}>編集を元に戻す</button></div>
+          </div>
+        </article>`;
+      }).join('') || '<p class="empty">該当する項目はありません。</p>';
+      updateStatus(visible.length);
+    };
+
+    entriesElement.addEventListener('input', (event) => {
+      const field = event.target.dataset.field;
+      if (!field) return;
+      const article = event.target.closest('article');
+      const entry = entries.find((item) => item.id === article.dataset.id);
+      updateEdit(entry, field, event.target.value);
+      article.classList.toggle('edited', edited(entry.id));
+      article.querySelector('[data-reset]').disabled = !edited(entry.id);
+      updateStatus();
+    });
+    entriesElement.addEventListener('change', (event) => {
+      if (!event.target.matches('[data-exclude]')) return;
+      const article = event.target.closest('article');
+      if (event.target.checked) excluded.add(article.dataset.id);
+      else excluded.delete(article.dataset.id);
+      article.classList.toggle('excluded', event.target.checked);
+      if (filterElement.value !== 'all') render();
+      else updateStatus();
+    });
+    entriesElement.addEventListener('click', (event) => {
+      if (!event.target.matches('[data-reset]')) return;
+      const article = event.target.closest('article');
+      const entry = entries.find((item) => item.id === article.dataset.id);
+      delete edits[entry.id];
+      article.querySelector('[data-field="title"]').value = entry.title;
+      article.querySelector('[data-field="description"]').value = entry.description;
+      article.classList.remove('edited');
+      event.target.disabled = true;
+      updateStatus();
+    });
+    searchElement.addEventListener('input', render);
+    filterElement.addEventListener('change', render);
+    saveButton.addEventListener('click', async () => {
+      saveButton.disabled = true;
+      saveButton.textContent = '保存中…';
+      try {
+        const response = await fetch('/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(review()) });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+        saved = JSON.stringify(review());
+        updateStatus();
+      } catch (error) {
+        statusElement.textContent = `保存に失敗しました: ${error.message}`;
+        saveButton.textContent = '再試行';
+      } finally { saveButton.disabled = false; }
+    });
+    addEventListener('beforeunload', (event) => {
+      if (JSON.stringify(review()) === saved) return;
+      event.preventDefault();
+      event.returnValue = '';
+    });
+
+    fetch('/data').then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    }).then((data) => {
+      entries = data.entries;
+      excluded = new Set(data.review.excluded);
+      edits = structuredClone(data.review.edits);
+      saved = JSON.stringify(review());
+      render();
+    }).catch((error) => { statusElement.textContent = `読み込みに失敗しました: ${error.message}`; });
+  </script>
+</body>
+</html>

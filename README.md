@@ -37,6 +37,22 @@ npm run review:fanart
 node scripts/merge-fanart-data.mjs
 ```
 
+## あゆみ掲載レビュー
+
+あゆみの掲載対象と表示文をローカルで編集する場合は、次を実行して <http://127.0.0.1:4176> を開きます。
+
+```sh
+npm run review:history
+```
+
+除外、タイトル、本文の変更は「変更を保存」で `data/history/history-review.json` に直接保存され、次回のサイトビルドから反映されます。
+
+指定したYouTubeチャンネルとプレイリストから動画を同期する場合は、`yt-dlp` をインストールした環境で次を実行します。初回は全動画、2回目以降は追加分だけ取得します。
+
+```sh
+npm run sync:history-youtube
+```
+
 ## Cloudflare Workers
 
 公開先: <https://houtougumi-memorial.anatofuz.net/>
